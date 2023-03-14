@@ -5,6 +5,8 @@
 ** IGame.hpp
 */
 
+#pragma once
+
 class IGame {
 
 };
