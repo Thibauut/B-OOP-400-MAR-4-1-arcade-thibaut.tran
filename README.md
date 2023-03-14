@@ -17,6 +17,11 @@ We include `3` graphic libs:
 - SDL
 - NCURSES
 
+### Game
+We have created `2` game libs:
+- Pacman
+- Snake
+
 ## Build
 
 ```
@@ -27,11 +32,6 @@ make re
 ```bash
 USAGE:
   ./arcade path_to_graphic_lib
-
-### Game
-We have created `2` game libs:
-- Pacman
-- Snake
 
 DESCRIPTION:
   lib         path to the initial graphical library to load (./lib/arcade_lib_name.so)
