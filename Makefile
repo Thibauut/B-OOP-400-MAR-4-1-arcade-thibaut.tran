@@ -14,7 +14,7 @@ SRC_NCURSES 	= 	lib_dynamic/arcade_ncurses.cpp 	\
 BIN = arcade
 
 all: graphicals
-	g++ main.cpp -ldl -o $(BIN) -fno-gnu-unique
+	g++ main.cpp -ldl -o $(BIN) -fno-gnu-unique -lsfml-graphics	-lsfml-window -lsfml-system
 
 clean:
 	rm -f lib/*.so

@@ -1,24 +1,71 @@
 /*
 ** EPITECH PROJECT, 2022
-** B-OOP-400-MAR-4-1-arcade-maori.dino
+** arcade games
 ** File description:
-** foo.cpp
+** Ncurse.cpp
 */
 
-#include <stdio.h>
-#include "arcade_ncurses.hpp"
-
+#include "Ncurse.hpp"
 
 extern "C" void __attribute__((constructor)) init_ncurses() {
     printf("[arcade_ncurses] Loading ncurses library...\n");
+    // SFML *sfml = new SFML();
 }
 
-extern "C" int entryPoint ()
+extern "C" int entryPoint()
 {
-    printf("[arcade_ncurses] Entry point for ncurses!\n");
+    printf("[arcade_ncurses] entryPoint ncurses library\n");
+    // SFML *sfml = new SFML();
     return 0;
 }
 
 extern "C" void __attribute__((destructor)) clean_ncurses() {
     printf("[arcade_ncurses] ncurses closing...\n");
 }
+
+// Ncurses::Ncurses()
+// {
+//     _info = "Ncurses";
+// }
+
+// Ncurses::~Ncurses() = default;
+
+// extern "C" std::string Ncurses::getInfo()
+// {
+//     return _info;
+// }
+
+// extern "C" IDisplayModule *Ncurses::entryPoint()
+// {
+//     return this;
+// }
+
+// void Ncurses::createWindow()
+// {
+//     initscr();
+//     noecho();
+//     cbreak();
+//     keypad(stdscr, TRUE);
+//     curs_set(0);
+// }
+
+// void Ncurses::createMenu()
+// {
+// }
+
+// void Ncurses::handleEvent()
+// {
+//     int ch = getch();
+// }
+
+// void Ncurses::destroyWindow()
+// {
+//     endwin();
+// }
+
+// void Ncurses::draw()
+// {
+//     clear();
+//     mvprintw(0, 0, "Hello World !!!");
+//     refresh();
+// }

@@ -40,7 +40,6 @@ COMMANDS:
   ?           next graphic lib
   ?           previous graphic lib
   ?           next game lib
-  ?           previous game lib
 
   ?           menu
   ?           reset the game

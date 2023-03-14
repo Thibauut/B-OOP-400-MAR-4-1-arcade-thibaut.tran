@@ -21,7 +21,10 @@ class arcade_sdl : public IDisplayModule {
         void clear() override;
         void refresh() override;
 
-        void entryPoint();
+        int entryPoint();
+
+        bool isRunning() const override { return true; };
+        const std::string &getName() const override;
 
         void drawSprite(int x, int y, const std::string &path, int width, int height);
 };

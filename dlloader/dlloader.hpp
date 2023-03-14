@@ -13,6 +13,7 @@
 template<typename T>
 class DLLoader {
     public:
+        DLLoader() : handler(nullptr) {}
         DLLoader(const std::string& filename) : handler(dlopen(filename.c_str(), RTLD_LAZY)) {}
 
         ~DLLoader() {
