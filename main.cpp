@@ -23,7 +23,7 @@ int main(int ac, char **av)
 {
     handle_error_argument(ac, av);
     DLLoader <IDisplayModule> dlloader(av[1]);
-    IDisplayModule *module = dlloader.getInstance("entryPoint");
+    IDisplayModule *module;
 
     std::string line;
 
@@ -31,14 +31,18 @@ int main(int ac, char **av)
     while(getline(std::cin, line)) {
         if (line == "exit")
             break;
-        if (line == "sfml")
+        else if (line == "sfml")
             dlloader.switchLibrary("lib/arcade_sfml.so");
-        if (line == "sdl")
+        else if (line == "sdl")
             dlloader.switchLibrary("lib/arcade_sdl.so");
-        if (line == "ncurses")
+        else if (line == "ncurses")
             dlloader.switchLibrary("lib/arcade_ncurses.so");
-        if (line == "entry")
+        else if (line == "simulate")
             module = dlloader.getInstance("entryPoint");
+        else if (line == "commands")
+            std::cout << "sfml | ncurses | sdl | simulate | exit" << std::endl;
+        else
+            std::cout << "Invalid command. Use \"commands\" to see commands" << std::endl;
         std::cout << "ARKD > ";
     }
 
