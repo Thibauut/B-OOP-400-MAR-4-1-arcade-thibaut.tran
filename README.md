@@ -4,7 +4,7 @@ Arcade is a game platform from the "Object-Oriented Programming" module and is a
 
 ## Requirements
 
-- C++20 compiler
+- C++ compiler
 - Makefile
 - Core, games, display separated
 - 3 graphic libs differents
