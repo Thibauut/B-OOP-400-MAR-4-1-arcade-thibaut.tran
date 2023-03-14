@@ -11,33 +11,21 @@
 #include "../Interfaces/IGame.hpp"
 #include "../dlloader/dlloader.hpp"
 
-class Core : public IDisplayModule{
+class Core {
     public:
         Core() {};
-        Core(std::string name, std::string path) : _name(name) { DLLoader <IDisplayModule> dlloader(path);};
         ~Core() {};
 
-        // IDisplayModule
-        void init() override {};
-        void stop() override {};
-        void clear() override {};
-        void refresh() override {};
-        bool isRunning() const override { return true; };
-
-        void run() {
+        void run(DLLoader <IDisplayModule> dl) {
+            setDisplay(dl.getInstance("entryPoint"));
             _currentDisplay->init();
-            setDisplay(dlloader.getInstance("entryPoint"));
-            // _currentGame->init();
             while (_currentDisplay->isRunning()) {
                 _currentDisplay->clear();
-                // _currentGame->update();
                 _currentDisplay->refresh();
             }
             _currentDisplay->stop();
-            // _currentGame->stop();
         };
 
-        const std::string &getName() const override { return _name; };
 
         // Setters
         void setDisplay(IDisplayModule *display) { _currentDisplay = display; };
@@ -48,9 +36,7 @@ class Core : public IDisplayModule{
         IGame *getGame() const { return _currentGame;};
 
     protected:
-        DLLoader <IDisplayModule> dlloader;
         IDisplayModule *_currentDisplay;
         IGame *_currentGame;
-        std::string _name;
         std::string _info;
 };

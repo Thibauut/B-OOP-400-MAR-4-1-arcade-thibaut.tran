@@ -15,10 +15,10 @@ class SFML: public IDisplayModule {
         SFML();
         ~SFML();
 
-        void init() override {};
-        void stop() override {};
+        void init() override;
+        void stop() override;
         void clear() override {};
-        void refresh() override {};
+        void refresh() override;
         bool isRunning() const override { return true; };
         const std::string &getName() const override { return "toto"; }
 

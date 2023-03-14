@@ -12,10 +12,10 @@ extern "C" void __attribute__((constructor)) init_arcade_sdl() {
     printf("[arcade_sdl] Loading sdl library...\n");
 }
 
-extern "C" int entryPoint()
+extern "C"  IDisplayModule *entryPoint()
 {
     printf("[arcade_sdl] Entry point for sdl!\n");
-    return 0;
+    return new arcade_sdl();
 }
 
 extern "C" void __attribute__((destructor)) clean_sdl() {

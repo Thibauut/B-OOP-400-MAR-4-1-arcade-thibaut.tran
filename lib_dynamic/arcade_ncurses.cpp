@@ -12,10 +12,10 @@ extern "C" void __attribute__((constructor)) init_ncurses() {
     // SFML *sfml = new SFML();
 }
 
-extern "C" int entryPoint()
+extern "C"  IDisplayModule *entryPoint()
 {
     printf("[arcade_ncurses] entryPoint ncurses library\n");
-    return 0;
+    return new Ncurses();
 }
 
 extern "C" void __attribute__((destructor)) clean_ncurses() {

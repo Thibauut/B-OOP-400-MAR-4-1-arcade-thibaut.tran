@@ -20,11 +20,9 @@ void handle_error_argument(int ac, char **av)
 int main(int ac, char **av)
 {
     handle_error_argument(ac, av);
-
-    // Core *core = new Core();
     DLLoader <IDisplayModule> dlloader(av[1]);
-    dlloader.getInstance("entryPoint");
-    // core->run();
+    Core *core = new Core();
+    core->run(dlloader);
     // std::string line;
 
     // std::cout << "ARKD > ";
