@@ -25,7 +25,7 @@ fclean: clean
 graphicals:
 	g++ -shared -fPIC -o lib/arcade_sfml.so $(SRC_SFML) -fno-gnu-unique -lsfml-graphics	-lsfml-window -lsfml-system
 	g++ -shared -fPIC -o lib/arcade_sdl.so $(SRC_SDL) -fno-gnu-unique
-	g++ -shared -fPIC -o lib/arcade_ncurses.so $(SRC_NCURSES) -fno-gnu-unique
+	g++ -shared -fPIC -o lib/arcade_ncurses.so $(SRC_NCURSES) -fno-gnu-unique -lncurses
 
 re: fclean all
 

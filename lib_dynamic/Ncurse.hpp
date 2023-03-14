@@ -8,25 +8,22 @@
 #pragma once
 
 #include "../Interfaces/IDisplayModule.hpp"
-
 #include <ncurses.h>
-#include <SFML/Graphics.hpp>
 
 class Ncurses: public IDisplayModule {
-        public:
-        Ncurses() {};
-        ~Ncurses() {};
+    public:
+        Ncurses();
+        ~Ncurses();
 
         void init() override;
         void stop() override;
-        void clear() override;
-        void refresh() override;
-        bool isRunning() const override { return true; };
-        const std::string &getName() const;
+        void clear() override {};
+        int refresh() override;
+        bool isRunning() const override { return _isRunning; };
+        const std::string &getName() const { return "toto"; };
 
-        std::string _info;
-        sf::Font _font;
-        sf::RenderWindow _window;
-        sf::Event _event;
-        sf::Sprite _background;
+        int handleEvent();
+
+    private:
+        bool _isRunning;
 };

@@ -21,7 +21,17 @@ class Core {
             _currentDisplay->init();
             while (_currentDisplay->isRunning()) {
                 _currentDisplay->clear();
-                _currentDisplay->refresh();
+                int refresh = _currentDisplay->refresh();
+                if (refresh == 1) {
+                    dl.switchLibrary("lib/arcade_ncurses.so");
+                    setDisplay(dl.getInstance("entryPoint"));
+                    _currentDisplay->init();
+                }
+                if (refresh == 2) {
+                    dl.switchLibrary("lib/arcade_sfml.so");
+                    setDisplay(dl.getInstance("entryPoint"));
+                    _currentDisplay->init();
+                }
             }
             _currentDisplay->stop();
         };

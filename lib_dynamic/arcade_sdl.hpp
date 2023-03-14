@@ -17,7 +17,7 @@ class arcade_sdl : public IDisplayModule {
         void init() override;
         void stop() override;
         void clear() override;
-        void refresh() override;
+        int refresh() override;
 
         bool isRunning() const override { return true; };
         const std::string &getName() const override;

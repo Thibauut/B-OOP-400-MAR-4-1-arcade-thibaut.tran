@@ -18,8 +18,8 @@ class SFML: public IDisplayModule {
         void init() override;
         void stop() override;
         void clear() override {};
-        void refresh() override;
-        bool isRunning() const override { return true; };
+        int refresh() override;
+        bool isRunning() const override { return _isRunning; };
         const std::string &getName() const override { return "toto"; }
 
         std::string _info;
@@ -27,21 +27,7 @@ class SFML: public IDisplayModule {
         sf::RenderWindow _window;
         sf::Event _event;
         sf::Sprite _background;
+
+    private:
+        bool _isRunning;
 };
-
-// class SFML: public IDisplayModule {
-//     public:
-//         SFML() {
-//             entryPoint();
-//         };
-//         ~SFML();
-
-//         void init() override;
-//         void stop() override;
-//         void clear() override;
-//         void refresh() override;
-
-//         int entryPoint() override;
-
-//         void drawSprite(int x, int y, const std::string &path, int width, int height);
-// };

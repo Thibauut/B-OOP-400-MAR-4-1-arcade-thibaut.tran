@@ -7,7 +7,7 @@
 
 #include "SFML.hpp"
 
-SFML::SFML() {
+SFML::SFML() : _isRunning(true) {
 
 }
 
@@ -41,7 +41,7 @@ void SFML::init()
     _window.setFramerateLimit(60);
 
     sf::Texture backgroundTexture;
-    backgroundTexture.loadFromFile("Library/assets/t.png");
+    backgroundTexture.loadFromFile("assets/t.png");
     _background.setTexture(backgroundTexture);
     _background.setPosition(0, 0);
     _background.setScale(1, 1);
@@ -62,10 +62,21 @@ void SFML::stop()
     _window.close();
 }
 
-void SFML::refresh()
+int SFML::refresh()
 {
+    while (_window.pollEvent(_event)) {
+        if (_event.type == sf::Event::Closed)
+            stop();
+        if (_event.type == sf::Event::KeyPressed) {
+            if (_event.key.code == sf::Keyboard::Escape) {
+                stop();
+                return (1);
+            }
+        }
+    }
     _window.draw(_background);
     _window.display();
+    return (0);
 }
 
 extern "C" void __attribute__((destructor)) clean_sfml()
