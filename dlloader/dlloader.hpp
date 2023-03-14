@@ -33,7 +33,7 @@ class DLLoader {
                 else
                     std::cerr << "Failed to find " << className << " in library\n";
             } else {
-                std::cerr << "Failed to load library\n";
+                std::cerr << "Failed to load library\n" << dlerror() << std::endl;
             }
 
             return instance;

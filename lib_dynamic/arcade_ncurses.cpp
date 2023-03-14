@@ -15,7 +15,6 @@ extern "C" void __attribute__((constructor)) init_ncurses() {
 extern "C" int entryPoint()
 {
     printf("[arcade_ncurses] entryPoint ncurses library\n");
-    // SFML *sfml = new SFML();
     return 0;
 }
 

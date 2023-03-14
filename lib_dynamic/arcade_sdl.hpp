@@ -11,17 +11,13 @@
 
 class arcade_sdl : public IDisplayModule {
     public:
-        arcade_sdl() {
-            entryPoint();
-        };
-        ~arcade_sdl();
+        arcade_sdl() {};
+        ~arcade_sdl() {};
 
         void init() override;
         void stop() override;
         void clear() override;
         void refresh() override;
-
-        int entryPoint();
 
         bool isRunning() const override { return true; };
         const std::string &getName() const override;

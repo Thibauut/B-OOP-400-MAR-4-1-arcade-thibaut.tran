@@ -7,9 +7,17 @@
 
 #include "SFML.hpp"
 
+SFML::SFML() {
+
+}
+
+SFML::~SFML() {
+
+}
+
 extern "C" void __attribute__((constructor)) init_sfml() {
     printf("[arcade_sfml] Loading sfml library...\n");
-    // SFML *sfml = new SFML();
+    SFML *sfml = new SFML();
 }
 
 // extern "C" std::string SFML::getInfo()
@@ -20,8 +28,7 @@ extern "C" void __attribute__((constructor)) init_sfml() {
 extern "C" int entryPoint()
 {
     printf("[arcade_sfml] entryPoint sfml library\n");
-    // SFML *sfml = new SFML();
-    return 0;
+   return 0;
 }
 
 // void SFML::createWindow()

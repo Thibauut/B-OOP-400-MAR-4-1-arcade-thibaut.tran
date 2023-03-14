@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include "arcade_sdl.hpp"
 
-
 extern "C" void __attribute__((constructor)) init_arcade_sdl() {
     printf("[arcade_sdl] Loading sdl library...\n");
 }

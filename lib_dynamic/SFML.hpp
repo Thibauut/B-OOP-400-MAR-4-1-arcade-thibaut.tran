@@ -12,17 +12,15 @@
 
 class SFML: public IDisplayModule {
     public:
-        SFML() { entryPoint();};
+        SFML();
         ~SFML();
 
-        void init() override;
-        void stop() override;
-        void clear() override;
-        void refresh() override;
+        void init() override {};
+        void stop() override {};
+        void clear() override {};
+        void refresh() override {};
         bool isRunning() const override { return true; };
-        const std::string &getName() const override;
-
-        int entryPoint() override;
+        const std::string &getName() const override { return "toto"; }
 
         std::string _info;
         sf::Font _font;

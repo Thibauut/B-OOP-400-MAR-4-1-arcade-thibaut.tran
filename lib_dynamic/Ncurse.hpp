@@ -14,8 +14,8 @@
 
 class Ncurses: public IDisplayModule {
         public:
-        Ncurses();
-        ~Ncurses();
+        Ncurses() {};
+        ~Ncurses() {};
 
         void init() override;
         void stop() override;
@@ -23,8 +23,6 @@ class Ncurses: public IDisplayModule {
         void refresh() override;
         bool isRunning() const override { return true; };
         const std::string &getName() const;
-
-        int entryPoint();
 
         std::string _info;
         sf::Font _font;

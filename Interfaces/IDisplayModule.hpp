@@ -20,7 +20,6 @@ class IDisplayModule {
         virtual void stop() = 0;
         virtual void clear() = 0;
         virtual void refresh() = 0;
-        virtual int entryPoint() = 0;
         virtual bool isRunning() const = 0;
         virtual const std::string &getName() const = 0;
 

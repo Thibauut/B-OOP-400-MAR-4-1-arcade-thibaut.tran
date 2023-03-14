@@ -38,7 +38,6 @@ class Core : public IDisplayModule{
         };
 
         const std::string &getName() const override { return _name; };
-        virtual int entryPoint() override {return 0; };
 
         // Setters
         void setDisplay(IDisplayModule *display) { _currentDisplay = display; };
