@@ -9,44 +9,29 @@
 
 #include "../Interfaces/IDisplayModule.hpp"
 #include "../Interfaces/IGame.hpp"
-#include "../dlloader/dlloader.hpp"
+#include "../Tools/dlloader/dlloader.hpp"
+#include "../Interfaces/AllObjects.hpp"
 
 class Core {
+
     public:
         Core() {};
         ~Core() {};
 
-        void run(DLLoader <IDisplayModule> dl) {
-            setDisplay(dl.getInstance("entryPoint"));
-            _currentDisplay->init();
-            while (_currentDisplay->isRunning()) {
-                _currentDisplay->clear();
-                int refresh = _currentDisplay->refresh();
-                if (refresh == 1) {
-                    dl.switchLibrary("lib/arcade_ncurses.so");
-                    setDisplay(dl.getInstance("entryPoint"));
-                    _currentDisplay->init();
-                }
-                if (refresh == 2) {
-                    dl.switchLibrary("lib/arcade_sfml.so");
-                    setDisplay(dl.getInstance("entryPoint"));
-                    _currentDisplay->init();
-                }
-            }
-            _currentDisplay->stop();
-        };
-
+        void switchLibraryGraphical(DLLoader <arcade::IDisplayModule> dl, const char *lib);
+        void run(DLLoader <arcade::IDisplayModule> dl);
 
         // Setters
-        void setDisplay(IDisplayModule *display) { _currentDisplay = display; };
-        void setGame(IGame *game) { _currentGame = game; };
+        void setDisplay(arcade::IDisplayModule *display) { _currentDisplay = display; };
+        void setGame(arcade::IGame *game) { _currentGame = game; };
 
         // Getters
-        IDisplayModule *getDisplay() const { return _currentDisplay; };
-        IGame *getGame() const { return _currentGame;};
+        arcade::IDisplayModule *getDisplay() const { return _currentDisplay; };
+        arcade::IGame *getGame() const { return _currentGame;};
 
     protected:
-        IDisplayModule *_currentDisplay;
-        IGame *_currentGame;
+        arcade::IDisplayModule *_currentDisplay;
+        arcade::IGame *_currentGame;
         std::string _info;
+
 };

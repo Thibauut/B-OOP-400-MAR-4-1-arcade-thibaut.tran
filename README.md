@@ -37,12 +37,12 @@ DESCRIPTION:
   lib         path to the initial graphical library to load (./lib/arcade_lib_name.so)
 
 COMMANDS:
-  ?           next graphic lib
-  ?           previous graphic lib
-  ?           next game lib
+  RIGHT       next graphic lib
+  LEFT        previous graphic lib
+  UP          next game lib
 
-  ?           menu
-  ?           reset the game
+  M           menu
+  R           reset the game
   ESC         quit arcade
 ```
 
@@ -52,5 +52,5 @@ In progress...
 ## Contributors
 
 - [Maori Dino](https://github.com/MaoKoro)
-- [Thibaut Tran]
-- [Yanis Denat]
+- [Thibaut Tran](https://github.com/Thibauut)
+- [Yanis Denat](https://github.com/Yanarusse)

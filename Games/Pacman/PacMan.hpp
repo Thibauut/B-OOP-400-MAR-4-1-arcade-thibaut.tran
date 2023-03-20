@@ -7,10 +7,10 @@
 
 #pragma once
 
-#include "../IGame.hpp"
+#include "../../Interfaces/IGame.hpp"
 
 namespace Arcade {
-    class PacManGame: public IGame {
+    class PacManGame: public arcade::IGame {
         public:
             PacManGame();
             ~PacManGame();

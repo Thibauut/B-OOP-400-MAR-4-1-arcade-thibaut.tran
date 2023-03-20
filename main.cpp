@@ -6,8 +6,7 @@
 */
 
 #include <iostream>
-#include "Core/Core.hpp"
-#include "lib_dynamic/arcade_sdl.hpp"
+#include "Core/Core.cpp"
 
 void handle_error_argument(int ac, char **av)
 {
@@ -20,7 +19,7 @@ void handle_error_argument(int ac, char **av)
 int main(int ac, char **av)
 {
     handle_error_argument(ac, av);
-    DLLoader <IDisplayModule> dlloader(av[1]);
+    DLLoader <arcade::IDisplayModule> dlloader(av[1]);
     Core *core = new Core();
     core->run(dlloader);
     // std::string line;
