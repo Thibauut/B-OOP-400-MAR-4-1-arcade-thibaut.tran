@@ -21,6 +21,8 @@ class arcade_sdl : public arcade::IDisplayModule {
 
         bool isRunning() const override { return true; };
         const std::string &getName() const override;
+                 void displayScore(int score) override {};
+        void playSound(const std::string &path, int volume, bool loop) override {};
 
         void drawSprite(int x, int y, const std::string &path, int width, int height);
 };

@@ -41,29 +41,30 @@ arcade::AllObjects *arcade::SnakeGame::initMap() {
     AllObjects *allObjects = new AllObjects();
     std::string line;
     while (getline(input_file, line))
-        _map.push_back(line);
+        _map.emplace_back(line);
     for (int i = 0; i < height_map; i++) {
         for (int j = 0; j < width_map; j++) {
             if (_map[i][j] == '#') {
                 Object *wall = new Object(j, i, 60, "Games/Snake/assets/image/tile024.png", arcade::Object::Type::WALL);
-                allObjects->_objects.push_back(wall);
+                allObjects->_objects.emplace_back(wall);
             }
             if (_map[i][j] == ' ') {
                 Object *empty = new Object(j, i, 60, "", arcade::Object::Type::EMPTY);
-                allObjects->_objects.push_back(empty);
+                allObjects->_objects.emplace_back(empty);
             }
         }
     }
-    // //place player
-    allObjects->_player.push_back(new Object(6, 9, 60, "Games/Snake/assets/image/tile052.png", arcade::Object::Type::HEAD));
-    allObjects->_player.push_back(new Object(5, 9, 60, "Games/Snake/assets/image/tile053.png", arcade::Object::Type::BODY));
-    allObjects->_player.push_back(new Object(4, 9, 60, "Games/Snake/assets/image/tile053.png", arcade::Object::Type::BODY));
-    allObjects->_player.push_back(new Object(3, 9, 60, "Games/Snake/assets/image/tile053.png", arcade::Object::Type::BODY));
+
+    //place player
+    allObjects->_player.emplace_back(new Object(6, 9, 60, "Games/Snake/assets/image/tile052.png", arcade::Object::Type::HEAD));
+    allObjects->_player.emplace_back(new Object(5, 9, 60, "Games/Snake/assets/image/tile053.png", arcade::Object::Type::BODY));
+    allObjects->_player.emplace_back(new Object(4, 9, 60, "Games/Snake/assets/image/tile053.png", arcade::Object::Type::BODY));
+    allObjects->_player.emplace_back(new Object(3, 9, 60, "Games/Snake/assets/image/tile053.png", arcade::Object::Type::BODY));
 
     // //place food
-    spawnBonus(allObjects);
+    allObjects->_food.emplace_back(new Object(16, 9, 60, "Games/Snake/assets/image/tile054.png", arcade::Object::Type::FOOD));
 
-    _sound.push_back(new arcade::Sound("Games/Snake/assets/audio/backsound.wav", arcade::Sound::Type::BACK_SOUND, true, 25));
+    _sound.emplace_back(new arcade::Sound("Games/Snake/assets/audio/backsound.wav", arcade::Sound::Type::BACK_SOUND, true, 25));
     return allObjects;
 }
 
@@ -74,7 +75,6 @@ std::string arcade::SnakeGame::getBackground() {
 std::string arcade::SnakeGame::getInfo() {
     return _info;
 }
-
 
 void arcade::SnakeGame::initGame() {
 
@@ -129,15 +129,15 @@ void arcade::SnakeGame::goLeft(arcade::AllObjects *allObjects) {
             return;
         }
     }
+
     for (auto &x : allObjects->_food) {
         if (x->_type == arcade::Object::Type::FOOD
         && x->_posx == allObjects->_player.front()->_posx - 1
         && x->_posy == allObjects->_player.front()->_posy) {
             _score += 1;
             std::cout << "score: " << _score << std::endl;
-            allObjects->_food.pop_back();
             spawnBonus(allObjects);
-            allObjects->_player.push_back(new Object(allObjects->_player.back()->_posx, allObjects->_player.back()->_posy, allObjects->_player.back()->_size, allObjects->_player.back()->_path, allObjects->_player.back()->_type));
+            allObjects->_player.emplace_back(new Object(allObjects->_player.back()->_posx, allObjects->_player.back()->_posy, allObjects->_player.back()->_size, allObjects->_player.back()->_path, allObjects->_player.back()->_type));
             _speed -= 0.005;
             break;
         }
@@ -176,15 +176,15 @@ void arcade::SnakeGame::goRight(arcade::AllObjects *allObjects) {
             return;
         }
     }
+
     for (auto &x : allObjects->_food) {
         if (x->_type == arcade::Object::Type::FOOD
         && x->_posx == allObjects->_player.front()->_posx + 1
         && x->_posy == allObjects->_player.front()->_posy) {
             _score += 1;
             std::cout << "score: " << _score << std::endl;
-            allObjects->_food.pop_back();
             spawnBonus(allObjects);
-            allObjects->_player.push_back(new Object(allObjects->_player.back()->_posx, allObjects->_player.back()->_posy, allObjects->_player.back()->_size, allObjects->_player.back()->_path, allObjects->_player.back()->_type));
+            allObjects->_player.emplace_back(new Object(allObjects->_player.back()->_posx, allObjects->_player.back()->_posy, allObjects->_player.back()->_size, allObjects->_player.back()->_path, allObjects->_player.back()->_type));
             _speed -= 0.005;
             break;
         }
@@ -223,15 +223,15 @@ void arcade::SnakeGame::goUp(arcade::AllObjects *allObjects) {
             return;
         }
     }
+
     for (auto &x : allObjects->_food) {
         if (x->_type == arcade::Object::Type::FOOD
         && x->_posx == allObjects->_player.front()->_posx
         && x->_posy == allObjects->_player.front()->_posy - 1) {
             _score += 1;
             std::cout << "score: " << _score << std::endl;
-            allObjects->_food.pop_back();
             spawnBonus(allObjects);
-            allObjects->_player.push_back(new Object(allObjects->_player.back()->_posx, allObjects->_player.back()->_posy, allObjects->_player.back()->_size, allObjects->_player.back()->_path,allObjects->_player.back()->_type));
+            allObjects->_player.emplace_back(new Object(allObjects->_player.back()->_posx, allObjects->_player.back()->_posy, allObjects->_player.back()->_size, allObjects->_player.back()->_path,allObjects->_player.back()->_type));
             _speed -= 0.005;
             break;
         }
@@ -266,20 +266,20 @@ void arcade::SnakeGame::goDown(arcade::AllObjects *allObjects) {
     for (auto &x : allObjects->_objects) {
         if ((x->_type == arcade::Object::Type::WALL
         &&x->_posx == allObjects->_player.front()->_posx
-        && x->_posy == allObjects->_player.front()->_posy + 1) ||( checkSnake(allObjects) == 1)) {
+        && x->_posy == allObjects->_player.front()->_posy + 1) ||(checkSnake(allObjects) == 1)) {
             _gameOver = true;
             return;
         }
     }
+
     for (auto &x : allObjects->_food) {
         if (x->_type == arcade::Object::Type::FOOD
         && x->_posx == allObjects->_player.front()->_posx
         && x->_posy == allObjects->_player.front()->_posy + 1) {
             _score += 1;
             std::cout << "score: " << _score << std::endl;
-            allObjects->_food.pop_back();
             spawnBonus(allObjects);
-            allObjects->_player.push_back(new Object(allObjects->_player.back()->_posx, allObjects->_player.back()->_posy, allObjects->_player.back()->_size, allObjects->_player.back()->_path, allObjects->_player.back()->_type));
+            allObjects->_player.emplace_back(new Object(allObjects->_player.back()->_posx, allObjects->_player.back()->_posy, allObjects->_player.back()->_size, allObjects->_player.back()->_path, allObjects->_player.back()->_type));
             _speed -= 0.005;
             break;
         }
@@ -319,20 +319,32 @@ int arcade::SnakeGame::getScore() {
 }
 
 void arcade::SnakeGame::spawnBonus(arcade::AllObjects *allObjects) {
+    if (allObjects == nullptr) {
+        return;
+    }
     srand(time(NULL));
     int x = rand() % 30 + 1;
-    int y = rand() % 15 + 1;
-    int fruit = rand() % 3;
+    int y = rand() % 16 + 1;
+    int fruit = rand() % 4;
+    bool bonusAdded = false;
     std::string _fruit[4] = {"Games/Snake/assets/image/tile054.png", "Games/Snake/assets/image/tile006.png", "Games/Snake/assets/image/tile022.png", "Games/Snake/assets/image/tile055.png"};
     for (auto it = allObjects->_player.begin(); it != allObjects->_player.end(); ++it) {
-        if (allObjects->_food.size() < 1 && (*it)->_posx != x && (*it)->_posy != y) {
+        if (allObjects->_food.size() < 1 && ((*it)->_posx != x && (*it)->_posy != y)) {
             Object *newBonus = new Object(x, y, 1, _fruit[fruit], arcade::Object::Type::FOOD);
-            allObjects->_food.push_back(newBonus);
-            return;
-        } else {
-            spawnBonus(allObjects);
-            return;
+            allObjects->_food.emplace_back(newBonus);
+            bonusAdded = true;
         }
+    }
+    for (auto it = allObjects->_food.begin(); it != allObjects->_food.end(); ) {
+        if ((*it)->_posx == x && (*it)->_posy == y) {
+            ++it;
+        } else {
+            delete *it;
+            it = allObjects->_food.erase(it);
+        }
+    }
+    if (!bonusAdded) {
+        spawnBonus(allObjects);
     }
 }
 

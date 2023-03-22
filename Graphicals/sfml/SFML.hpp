@@ -8,9 +8,8 @@
 #pragma once
 
 #include "../../Interfaces/IDisplayModule.hpp"
-#include "../../Interfaces/Object.hpp"
-#include "../../Interfaces/IGame.hpp"
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 namespace arcade {
     class SFML: public IDisplayModule {
@@ -34,6 +33,8 @@ namespace arcade {
             void clear() override {};
             const std::string &getName() const override { return _info; }
             bool isRunning() const override { return true; };
+            void displayScore(int score) override;
+            void playSound(const std::string &path, int volume, bool loop) override;
 
             int _state;
             std::string _info;
@@ -53,7 +54,8 @@ namespace arcade {
             sf::Texture _snakeBtTexture;
             sf::Sprite _quitBt;
             sf::Texture _quitBtTexture;
-            bool _isRunning;
+            sf::Text _score;
+            sf::Music _music;
 
     };
 }

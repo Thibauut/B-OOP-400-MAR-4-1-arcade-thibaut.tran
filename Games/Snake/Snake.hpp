@@ -8,7 +8,6 @@
 #pragma once
 
 #include "../../Interfaces/IGame.hpp"
-#include "../../Tools/Sound.hpp"
 
 namespace arcade {
     class SnakeGame: public IGame {
@@ -17,7 +16,7 @@ namespace arcade {
             ~SnakeGame();
 
             int width_map = 32;
-            int height_map = 18;
+            int height_map = 17;
 
             arcade::AllObjects *initMap();
             void initGame();

@@ -17,6 +17,7 @@
 #include "Object.hpp"
 #include "AllObjects.hpp"
 #include "../Tools/Input.hpp"
+#include "../Tools/Sound.hpp"
 
 using namespace std;
 
@@ -33,5 +34,6 @@ namespace arcade {
             virtual bool gameOver() = 0;
             virtual int getScore() = 0;
             virtual void spawnBonus(arcade::AllObjects *allObjects) = 0;
+            virtual std::vector<arcade::Sound*> sound() = 0;
     };
 }

@@ -23,6 +23,7 @@ void Core::run(DLLoader <arcade::IDisplayModule> dl)
     arcade::AllObjects *AllObjects = _currentGame->initMap();
     _currentDisplay->init();
     _currentGame->initGame();
+    _currentDisplay->playSound(_currentGame->sound()[0]->_path, _currentGame->sound()[0]->_volume, _currentGame->sound()[0]->_loop);
     while (_currentDisplay->isRunning()) {
         _currentGame->handleEvent(_currentDisplay->handleEvent());
         _currentGame->update(AllObjects);
@@ -34,12 +35,16 @@ void Core::run(DLLoader <arcade::IDisplayModule> dl)
         }
         _currentDisplay->menu();
         _currentDisplay->drawBackground(_currentGame->getBackground());
+        _currentDisplay->displayScore(_currentGame->getScore());
         int refresh = _currentDisplay->refresh(AllObjects);
         if (refresh == 1)
             switchLibraryGraphical(dl, "lib/arcade_ncurses.so");
         if (refresh == 2)
             switchLibraryGraphical(dl, "lib/arcade_sfml.so");
-        _currentDisplay->clear();
+        // _currentDisplay->clear();
     }
+    delete AllObjects;
     _currentDisplay->stop();
+    delete _currentGame;
+    delete _currentDisplay;
 }

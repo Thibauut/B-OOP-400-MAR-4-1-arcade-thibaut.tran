@@ -9,15 +9,15 @@
 
 using namespace arcade;
 
+extern "C" void __attribute__((constructor)) init_sfml() {
+    printf("[arcade_sfml] Loading sfml library...\n");
+    SFML *sfml = new SFML();
+}
+
 extern "C" IDisplayModule *entryPoint()
 {
     printf("[arcade_sfml] entryPoint sfml library\n");
    return new SFML();
-}
-
-extern "C" void __attribute__((constructor)) init_sfml() {
-    printf("[arcade_sfml] Loading sfml library...\n");
-    SFML *sfml = new SFML();
 }
 
 extern "C" void __attribute__((destructor)) clean_sfml()
@@ -28,7 +28,7 @@ extern "C" void __attribute__((destructor)) clean_sfml()
 arcade::SFML::SFML()
 {
     _info = "SFML";
-    _isRunning = true;
+    _state = STATES::GAME;
 }
 
 arcade::SFML::~SFML() = default;
@@ -53,10 +53,9 @@ void arcade::SFML::init()
     //window
     _window = new sf::RenderWindow(sf::VideoMode(1920, 1080), "Arcade - SFML", sf::Style::Resize | sf::Style::Close);
     _window->setFramerateLimit(60);
-    _state = STATES::GAME;
 
     //font
-    _font.loadFromFile("assets/font/visitor.ttf");
+    _font.loadFromFile("Library/assets/font/visitor.ttf");
 
     //title
     _title.setFont(_font);
@@ -67,7 +66,7 @@ void arcade::SFML::init()
     _title.setOutlineThickness(10);
 
     //background
-    _backgroundTexture.loadFromFile("assets/image/background.png");
+    _backgroundTexture.loadFromFile("Library/assets/image/background.png");
     _background.setTexture(_backgroundTexture);
     _background.setPosition(0, 0);
     _background.setScale(1, 1);
@@ -78,19 +77,19 @@ void arcade::SFML::init()
     _background.setTextureRect(_rectBackground);
 
     //pacman button
-    _pacmanBtTexture.loadFromFile("assets/image/pacman_bt.png");
+    _pacmanBtTexture.loadFromFile("Library/assets/image/pacman_bt.png");
     _pacmanBt.setTexture(_pacmanBtTexture);
     _pacmanBt.setPosition(790, 600);
     _pacmanBt.setScale(0.4, 0.38);
 
     //snake button
-    _snakeBtTexture.loadFromFile("assets/image/snake_bt.png");
+    _snakeBtTexture.loadFromFile("Library/assets/image/snake_bt.png");
     _snakeBt.setTexture(_snakeBtTexture);
     _snakeBt.setPosition(820, 700);
     _snakeBt.setScale(0.4, 0.38);
 
     //quit button
-    _quitBtTexture.loadFromFile("assets/image/quit_bt.png");
+    _quitBtTexture.loadFromFile("Library/assets/image/quit_bt.png");
     _quitBt.setTexture(_quitBtTexture);
     _quitBt.setPosition(850, 810);
     _quitBt.setScale(0.4, 0.38);
@@ -146,6 +145,14 @@ void arcade::SFML::drawElement(arcade::Object *object)
     }
 }
 
+void arcade::SFML::displayScore(int score)
+{
+    _score.setFont(_font);
+    _score.setString("Score: " + std::to_string(score));
+    _score.setCharacterSize(70);
+    _score.setPosition(30, -22);
+}
+
 int arcade::SFML::refresh(arcade::AllObjects *AllObjects)
 {
     if (_state == STATES::MENU) {
@@ -163,6 +170,7 @@ int arcade::SFML::refresh(arcade::AllObjects *AllObjects)
             drawElement(i);
         for (auto &i : AllObjects->_food)
             drawElement(i);
+        _window->draw(_score);
     }
     if (_state == STATES::SETTINGS) {
 
@@ -172,4 +180,15 @@ int arcade::SFML::refresh(arcade::AllObjects *AllObjects)
     }
     _window->display();
     return (0);
+}
+
+void arcade::SFML::playSound(const std::string &path, int volume, bool loop)
+{
+    if (!_music.openFromFile(path)) {
+        std::cerr << "Erreur lors du chargement de " << path << std::endl;
+        return;
+    }
+    _music.setVolume(volume);
+    _music.setLoop(loop);
+    _music.play();
 }
