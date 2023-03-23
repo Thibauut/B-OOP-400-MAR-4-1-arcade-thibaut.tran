@@ -6,8 +6,7 @@
 */
 
 #include <stdio.h>
-// #include "arcade_sdl.hpp"
-#include "../sfml/SFML.hpp"
+#include "arcade_sdl.hpp"
 
 extern "C" void __attribute__((constructor)) init_arcade_sdl() {
     printf("[arcade_sdl] Loading sdl library...\n");
@@ -16,7 +15,7 @@ extern "C" void __attribute__((constructor)) init_arcade_sdl() {
 extern "C"  arcade::IDisplayModule *entryPoint()
 {
     printf("[arcade_sdl] Entry point for sdl!\n");
-    return new arcade::SFML();
+    return new arcade::SDL2();
 }
 
 extern "C" void __attribute__((destructor)) clean_sdl() {

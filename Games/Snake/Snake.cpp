@@ -89,6 +89,8 @@ int arcade::SnakeGame::handleEvent(arcade::Input input) {
         _direction = arcade::Input::ARROW_UP;
     if (input == arcade::Input::ARROW_DOWN && _direction != arcade::Input::ARROW_UP)
         _direction = arcade::Input::ARROW_DOWN;
+    if (input == arcade::Input::SPACE)
+        _speed -= 0.005;
     return 0;
 }
 
@@ -323,8 +325,8 @@ void arcade::SnakeGame::spawnBonus(arcade::AllObjects *allObjects) {
         return;
     }
     srand(time(NULL));
-    int x = rand() % 30 + 1;
-    int y = rand() % 16 + 1;
+    int x = rand() % (height_map - 3) + 1;
+    int y = rand() % (width_map - 3) + 1;
     int fruit = rand() % 4;
     bool bonusAdded = false;
     std::string _fruit[4] = {"Games/Snake/assets/image/tile054.png", "Games/Snake/assets/image/tile006.png", "Games/Snake/assets/image/tile022.png", "Games/Snake/assets/image/tile055.png"};

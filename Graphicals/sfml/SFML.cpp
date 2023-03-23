@@ -55,7 +55,7 @@ void arcade::SFML::init()
     _window->setFramerateLimit(60);
 
     //font
-    _font.loadFromFile("Library/assets/font/visitor.ttf");
+    _font.loadFromFile("assets/font/visitor.ttf");
 
     //title
     _title.setFont(_font);
@@ -66,7 +66,7 @@ void arcade::SFML::init()
     _title.setOutlineThickness(10);
 
     //background
-    _backgroundTexture.loadFromFile("Library/assets/image/background.png");
+    _backgroundTexture.loadFromFile("assets/image/background.png");
     _background.setTexture(_backgroundTexture);
     _background.setPosition(0, 0);
     _background.setScale(1, 1);
@@ -77,19 +77,19 @@ void arcade::SFML::init()
     _background.setTextureRect(_rectBackground);
 
     //pacman button
-    _pacmanBtTexture.loadFromFile("Library/assets/image/pacman_bt.png");
+    _pacmanBtTexture.loadFromFile("assets/image/pacman_bt.png");
     _pacmanBt.setTexture(_pacmanBtTexture);
     _pacmanBt.setPosition(790, 600);
     _pacmanBt.setScale(0.4, 0.38);
 
     //snake button
-    _snakeBtTexture.loadFromFile("Library/assets/image/snake_bt.png");
+    _snakeBtTexture.loadFromFile("assets/image/snake_bt.png");
     _snakeBt.setTexture(_snakeBtTexture);
     _snakeBt.setPosition(820, 700);
     _snakeBt.setScale(0.4, 0.38);
 
     //quit button
-    _quitBtTexture.loadFromFile("Library/assets/image/quit_bt.png");
+    _quitBtTexture.loadFromFile("assets/image/quit_bt.png");
     _quitBt.setTexture(_quitBtTexture);
     _quitBt.setPosition(850, 810);
     _quitBt.setScale(0.4, 0.38);
@@ -110,6 +110,8 @@ arcade::Input arcade::SFML::handleEvent()
             return (arcade::Input::ARROW_UP);
         if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Down)
             return (arcade::Input::ARROW_DOWN);
+        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Space)
+            return (arcade::Input::SPACE);
     }
     return (arcade::Input::NONE);
 }

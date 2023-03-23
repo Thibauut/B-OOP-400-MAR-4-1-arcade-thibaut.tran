@@ -34,7 +34,7 @@ core:
 
 graphicals:
 	g++ -shared -fPIC -o lib/arcade_sfml.so $(SRC_SFML) -lsfml-graphics	-lsfml-audio -lsfml-window -lsfml-system
-	g++ -shared -fPIC -o lib/arcade_sdl.so $(SRC_SDL) -fno-gnu-unique
+	g++ -shared -fPIC -o lib/arcade_sdl.so $(SRC_SDL) -lSDL2
 	g++ -shared -fPIC -o lib/arcade_ncurses.so $(SRC_NCURSES) -fno-gnu-unique -lncurses
 
 re: fclean all
