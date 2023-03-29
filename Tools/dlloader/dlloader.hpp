@@ -28,6 +28,10 @@ class DLLoader {
             }
         }
 
+        void close() {
+            dlclose(handler);
+        }
+
         T* getInstance(const std::string& className) {
             T* instance = nullptr;
 
@@ -53,7 +57,8 @@ class DLLoader {
             if ((dir = opendir ("./lib")) != NULL) {
                 while ((ent = readdir (dir)) != NULL) {
                     if (ent->d_name[0] != '.') {
-                        path.push_back(ent->d_name);
+                        std::string tmp = "./lib/" + std::string(ent->d_name);
+                        path.push_back(tmp);
                     }
                 }
                 closedir (dir);
@@ -88,7 +93,7 @@ class DLLoader {
             handler = dlopen(_path[_currentLib].c_str(), RTLD_LAZY);
         }
 
-    private:
+    public:
         void *handler;
         std::vector<std::string> _path;
         int _currentLib;

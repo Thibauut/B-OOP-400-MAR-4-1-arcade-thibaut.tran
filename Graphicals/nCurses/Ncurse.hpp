@@ -12,26 +12,28 @@
 
 class Ncurses: public arcade::IDisplayModule {
     public:
+        enum STATES {
+            MENU,
+            GAME,
+            SETTINGS,
+            EXIT
+        };
         Ncurses();
         ~Ncurses();
 
         void init() override;
-        void stop() override;
-        void clear() override {};
-        void menu() override {};
-        void displayScore(int score) override {};
-        void playSound(const std::string &path, int volume, bool loop) override {};
-        void drawBackground(const std::string &background) override {};
-        void drawElement(arcade::Object *object) override {};
         arcade::Input handleEvent() override;
-        int refresh(arcade::AllObjects *AllObjects) override;
-        bool isRunning() const override { return _isRunning; };
-        const std::string &getName() const override { return "toto"; };
+        void refreshw(arcade::AllObjects *AllObjects) override;
+        void menu() override;
+        void drawBackground(const std::string &background) override;
+        void drawElement(arcade::Object *object) override;
+        void stop() override;
+        void clear() override;
+        const std::string &getName() const override { return _info; }
+        bool isRunning() const override { return true; };
+        void displayScore(int score) override;
+        void playSound(const std::string &path, int volume, bool loop) override;
 
-        int handleKeys();
-
-        // int handleEvent();
-
-    private:
-        bool _isRunning;
+        int _state;
+        std::string _info;
 };

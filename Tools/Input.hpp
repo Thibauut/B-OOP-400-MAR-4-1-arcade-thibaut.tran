@@ -23,6 +23,8 @@ namespace arcade {
         ARROW_DOWN = 66,
         ARROW_RIGHT = 67,
         ARROW_LEFT = 68,
+        SWITCH_LIB = 6,
+        SWITCH_GAME = 7,
         NONE = 0
     };
 }

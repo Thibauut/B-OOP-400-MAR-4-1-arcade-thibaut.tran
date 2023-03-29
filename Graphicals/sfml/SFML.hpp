@@ -25,7 +25,7 @@ namespace arcade {
 
             void init() override;
             arcade::Input handleEvent() override;
-            int refresh(arcade::AllObjects *AllObjects) override;
+            void refreshw(arcade::AllObjects *AllObjects) override;
             void menu() override;
             void drawBackground(const std::string &background) override;
             void drawElement(arcade::Object *object) override;
@@ -59,3 +59,4 @@ namespace arcade {
 
     };
 }
+

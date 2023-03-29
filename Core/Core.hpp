@@ -18,8 +18,9 @@ class Core {
         Core() {};
         ~Core() {};
 
-        void switchLibraryGraphical(DLLoader <arcade::IDisplayModule> dl, const char *lib);
-        void run(DLLoader <arcade::IDisplayModule> dl);
+        void switchLibraryGraphical(DLLoader <arcade::IDisplayModule> *dl, const char *lib);
+        void switchLibraryGame(DLLoader <arcade::IGame> *dl, const char *lib);
+        void run(DLLoader <arcade::IDisplayModule> *dl);
 
         // Setters
         void setDisplay(arcade::IDisplayModule *display) { _currentDisplay = display; };
@@ -30,6 +31,7 @@ class Core {
         arcade::IGame *getGame() const { return _currentGame;};
 
     protected:
+        arcade::AllObjects *_allObjects;
         arcade::IDisplayModule *_currentDisplay;
         arcade::IGame *_currentGame;
         std::string _info;

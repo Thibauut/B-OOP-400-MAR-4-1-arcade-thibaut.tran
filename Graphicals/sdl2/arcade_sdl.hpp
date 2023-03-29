@@ -9,6 +9,8 @@
 
 #include "../../Interfaces/IDisplayModule.hpp"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 
 namespace arcade {
     class SDL2: public IDisplayModule {
@@ -24,7 +26,7 @@ namespace arcade {
 
             void init() override;
             arcade::Input handleEvent() override;
-            int refresh(arcade::AllObjects *AllObjects) override;
+            void refreshw(arcade::AllObjects *AllObjects) override;
             void menu() override;
             void drawBackground(const std::string &background) override;
             void drawElement(arcade::Object *object) override;
@@ -37,11 +39,15 @@ namespace arcade {
 
             int _state;
             std::string _info;
-            // sf::Font _font;
-            // sf::RenderWindow *_window;
-            // sf::Event _event;
-            // sf::Sprite _background;
-            // sf::Texture _backgroundTexture;
+            SDL_Window *_window;
+            SDL_Renderer *_renderer;
+            TTF_Font *_font;
+            SDL_Event *_event;
+            SDL_Surface *_background;
+            SDL_Texture *_backgroundTexture;
+            SDL_Rect _backgroundRect;
+            SDL_Texture *_score;
+            SDL_Rect _scoreRect;
             // sf::Sprite _backgroundGame;
             // sf::Texture _backgroundGameTexture;
             // sf::Text _title;
@@ -53,7 +59,6 @@ namespace arcade {
             // sf::Texture _snakeBtTexture;
             // sf::Sprite _quitBt;
             // sf::Texture _quitBtTexture;
-            // sf::Text _score;
             // sf::Music _music;
 
     };

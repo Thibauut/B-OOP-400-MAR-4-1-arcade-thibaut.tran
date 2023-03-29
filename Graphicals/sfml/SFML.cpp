@@ -1,28 +1,25 @@
 /*
 ** EPITECH PROJECT, 2022
-** arcade games
+** Untitled (Workspace)
 ** File description:
 ** SFML.cpp
 */
 
 #include "SFML.hpp"
 
-using namespace arcade;
-
-extern "C" void __attribute__((constructor)) init_sfml() {
-    printf("[arcade_sfml] Loading sfml library...\n");
-    SFML *sfml = new SFML();
+extern "C" void __attribute__((constructor)) init_arcade_sfml() {
+    printf("[arcade_sfml] Loading library...\n");
+    printf("[arcade_sfml] Library loaded !\n");
 }
 
-extern "C" IDisplayModule *entryPoint()
+extern "C"  arcade::IDisplayModule *entryPoint()
 {
-    printf("[arcade_sfml] entryPoint sfml library\n");
-   return new SFML();
+    printf("[arcade_sfml] Entry point !\n");
+    return new arcade::SFML();
 }
 
-extern "C" void __attribute__((destructor)) clean_sfml()
-{
-    printf("[arcade_sfml] sfml closing...\n");
+extern "C" void __attribute__((destructor)) clean_sfml() {
+    printf("[arcade_sfml] Closed !\n");
 }
 
 arcade::SFML::SFML()
@@ -110,8 +107,10 @@ arcade::Input arcade::SFML::handleEvent()
             return (arcade::Input::ARROW_UP);
         if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Down)
             return (arcade::Input::ARROW_DOWN);
-        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Space)
-            return (arcade::Input::SPACE);
+        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::G)
+            return (arcade::Input::SWITCH_LIB);
+        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::H)
+            return (arcade::Input::SWITCH_GAME);
     }
     return (arcade::Input::NONE);
 }
@@ -155,7 +154,7 @@ void arcade::SFML::displayScore(int score)
     _score.setPosition(30, -22);
 }
 
-int arcade::SFML::refresh(arcade::AllObjects *AllObjects)
+void arcade::SFML::refreshw(arcade::AllObjects *AllObjects)
 {
     if (_state == STATES::MENU) {
         _window->draw(_background);
@@ -166,12 +165,22 @@ int arcade::SFML::refresh(arcade::AllObjects *AllObjects)
     }
     if (_state == STATES::GAME) {
         _window->draw(_backgroundGame);
-        for (auto &i : AllObjects->_objects)
-            drawElement(i);
-        for (auto &i : AllObjects->_player)
-            drawElement(i);
-        for (auto &i : AllObjects->_food)
-            drawElement(i);
+        if (!AllObjects->_objects.empty()) {
+            for (auto &i : AllObjects->_objects)
+                drawElement(i);
+        }
+        if (!AllObjects->_player.empty()) {
+            for (auto &i : AllObjects->_player)
+                drawElement(i);
+        }
+        if (!AllObjects->_food.empty()) {
+            for (auto &i : AllObjects->_food)
+                drawElement(i);
+        }
+        if (!AllObjects->_enemy.empty()) {
+            for (auto &i : AllObjects->_enemy)
+                drawElement(i);
+        }
         _window->draw(_score);
     }
     if (_state == STATES::SETTINGS) {
@@ -181,7 +190,6 @@ int arcade::SFML::refresh(arcade::AllObjects *AllObjects)
         _window->close();
     }
     _window->display();
-    return (0);
 }
 
 void arcade::SFML::playSound(const std::string &path, int volume, bool loop)

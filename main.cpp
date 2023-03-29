@@ -20,11 +20,12 @@ int main(int ac, char **av)
 {
     handle_error_argument(ac, av);
 
-    DLLoader <arcade::IDisplayModule> dlloader(av[1]);
+    DLLoader <arcade::IDisplayModule> dlloader;
+    dlloader.switchLibrary(av[1]);
 
     Core *core = new Core();
 
-    core->run(dlloader);
+    core->run(&dlloader);
 
     return (0);
 }

@@ -31,8 +31,8 @@ namespace arcade {
             virtual void stop() = 0;
             virtual void clear() = 0;
             virtual void menu() = 0;
+            virtual void refreshw(arcade::AllObjects *AllObjects) = 0;
             virtual void drawBackground(const std::string &background) = 0;
-            virtual int refresh(arcade::AllObjects *AllObjects) = 0;
             virtual void drawElement(arcade::Object *object) = 0;
             virtual void displayScore(int score) = 0;
             virtual arcade::Input handleEvent() = 0;
