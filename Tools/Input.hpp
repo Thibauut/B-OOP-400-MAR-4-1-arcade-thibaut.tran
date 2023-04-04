@@ -25,6 +25,9 @@ namespace arcade {
         ARROW_LEFT = 68,
         SWITCH_LIB = 6,
         SWITCH_GAME = 7,
+        MENU_1 = 109,
+        PACMAN = 1000,
+        SNAKE = 1001,
         NONE = 0
     };
 }

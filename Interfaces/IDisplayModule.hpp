@@ -29,7 +29,7 @@ namespace arcade {
 
             virtual void init() = 0;
             virtual void stop() = 0;
-            virtual void clear() = 0;
+            virtual void clearw() = 0;
             virtual void menu() = 0;
             virtual void refreshw(arcade::AllObjects *AllObjects) = 0;
             virtual void drawBackground(const std::string &background) = 0;

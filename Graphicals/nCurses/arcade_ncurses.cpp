@@ -1,78 +1,9 @@
-// /*
-// ** EPITECH PROJECT, 2022
-// ** arcade games
-// ** File description:
-// ** Ncurse.cpp
-// */
-
-// #include "Ncurse.hpp"
-
-
-// Ncurses::Ncurses()
-// {
-//     _isRunning = true;
-// }
-
-// Ncurses::~Ncurses() {};
-
-// // extern "C" std::string Ncurses::getInfo()
-// // {
-// //     return _info;
-// // }
-
-// // extern "C" arcade::IDisplayModule *Ncurses::entryPoint()
-// // {
-// //     return this;
-// // }
-
-// void Ncurses::init()
-// {
-//     initscr();
-//     noecho();
-//     cbreak();
-//     keypad(stdscr, TRUE);
-//     curs_set(0);
-// }
-
-// // void Ncurses::createMenu()
-// // {
-// // }
-
-// arcade::Input Ncurses::handleEvent()
-// {
-//     return (arcade::Input::NONE);
-// }
-
-// int Ncurses::handleKeys()
-// {
-//     int ch = getch();
-//     if (ch == 27)
-//         return (1);
-//     return (0);
-// }
-
-// void Ncurses::stop()
-// {
-//     endwin();
-// }
-
-// int Ncurses::refresh(arcade::AllObjects *AllObjects)
-// {
-//     if (handleEvent() == 1)
-//         return (2);
-//     clear();
-//     mvprintw(0, 0, "Hello World !!!");
-//     // refresh();
-//     return (0);
-// }
-
-
-// /*
-// ** EPITECH PROJECT, 2022
-// ** arcade games
-// ** File description:
-// ** Ncurse.cpp
-// */
+/*
+** EPITECH PROJECT, 2022
+** Visual Studio Live Share (Workspace)
+** File description:
+** arcade_ncurses.cpp
+*/
 
 #include "Ncurse.hpp"
 #include <cstring>
@@ -120,8 +51,60 @@ void print_title() {
 
 void Ncurses::menu()
 {
+    initscr();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    const char* options[] = {"  SNAKE  ", " PAC-MAN ", "  LEAVE  "};
+    int selected_option = 0;
+    start_color();
+    init_pair(1, COLOR_WHITE, COLOR_WHITE);
+    init_pair(2, COLOR_WHITE, COLOR_BLACK);
+    while (true)
+    {
+        print_title();
+        int menu_width = MENU_WIDTH;
+        for (int i = 0; i < 3; i++)
+        {
+            int option_length = strlen(options[i]);
+            if (option_length > menu_width) {
+                menu_width = option_length;
+            }
+        }
+        int start_col = (COLS - menu_width) / 2;
+        for (int i = 0; i < 3; i++)
+        {
+            int option_length = strlen(options[i]);
+            int option_col = start_col + (menu_width - option_length) / 2;
+            attron(i == selected_option ? COLOR_PAIR(1) : COLOR_PAIR(2));
+            mvprintw((LINES - MENU_HEIGHT) / 2 + i, option_col, "%s", options[i]);
+            attroff(i == selected_option ? COLOR_PAIR(1) : COLOR_PAIR(2));
+        }
+        refresh();
+        int ch = getch();
+        switch (ch)
+        {
+            case KEY_UP:
+                selected_option = (selected_option - 1 + 3) % 3;
+                break;
+            case KEY_DOWN:
+                selected_option = (selected_option + 1) % 3;
+                break;
+            case '\n':
+                if (selected_option == 0) {
+                    // start the SNAKE game
+                }
+                else if (selected_option == 1) {
+                    // start the PACMAN game
+                }
+                else {
+                    endwin();
+                    exit(0);
+                }
+                break;
+        }
+    }
 }
-
 
 
 void Ncurses::init()
@@ -151,7 +134,7 @@ arcade::Input Ncurses::handleEvent()
         return arcade::Input::ESCAPE;
     if (ch == 'g')
         return arcade::Input::SWITCH_LIB;
-    if (ch == arcade::Input::SWITCH_GAME)
+    if (ch == 'h')
         return arcade::Input::SWITCH_GAME;
     return arcade::Input::NONE;
 }
@@ -161,7 +144,7 @@ void Ncurses::stop()
     endwin();
 }
 
-void Ncurses::clear()
+void Ncurses::clearw()
 {
     clear();
 }

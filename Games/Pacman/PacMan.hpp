@@ -16,7 +16,7 @@ namespace arcade {
             ~PacManGame();
 
             int width_map = 32;
-            int height_map = 18;
+            int height_map = 17;
 
             arcade::AllObjects *initMap();
             void initGame();

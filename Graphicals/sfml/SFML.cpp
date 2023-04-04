@@ -25,7 +25,8 @@ extern "C" void __attribute__((destructor)) clean_sfml() {
 arcade::SFML::SFML()
 {
     _info = "SFML";
-    _state = STATES::GAME;
+    _state = STATES::MENU;
+    _selectedButton = 0;
 }
 
 arcade::SFML::~SFML() = default;
@@ -42,6 +43,47 @@ void arcade::SFML::menu()
             _rectBackground.top = 0;
         _background.setTextureRect(_rectBackground);
         _clock.restart();
+    }
+
+    sf::Vector2i mousePosition = sf::Mouse::getPosition();
+
+
+    sf::RectangleShape buttonPACMAN(sf::Vector2f(_pacmanBt.getGlobalBounds().width, _pacmanBt.getGlobalBounds().height));
+    buttonPACMAN.setPosition(_pacmanBt.getPosition());
+    _buttonPACMAN = buttonPACMAN;
+    _buttonPACMAN.setTexture(&_pacmanBtTexture);
+
+    sf::RectangleShape buttonSNAKE(sf::Vector2f(_snakeBt.getGlobalBounds().width, _snakeBt.getGlobalBounds().height));
+    buttonSNAKE.setPosition(_snakeBt.getPosition());
+    _buttonSNAKE = buttonSNAKE;
+    _buttonSNAKE.setTexture(&_snakeBtTexture);
+
+    sf::RectangleShape buttonQUIT(sf::Vector2f(_quitBt.getGlobalBounds().width, _quitBt.getGlobalBounds().height));
+    buttonQUIT.setPosition(_quitBt.getPosition());
+    _buttonQUIT = buttonQUIT;
+    _buttonQUIT.setTexture(&_quitBtTexture);
+
+    //selected button
+    switch (_selectedButton)
+    {
+        case 0:
+            _buttonPACMAN.setOutlineThickness(5.f);
+            _buttonPACMAN.setOutlineColor(sf::Color(147,112,219));
+            _buttonSNAKE.setOutlineThickness(0.f);
+            _buttonQUIT.setOutlineThickness(0.f);
+            break;
+        case 1:
+            _buttonPACMAN.setOutlineThickness(0.f);
+            _buttonSNAKE.setOutlineThickness(5.f);
+            _buttonSNAKE.setOutlineColor(sf::Color(147,112,219));
+            _buttonQUIT.setOutlineThickness(0.f);
+            break;
+        case 2:
+            _buttonPACMAN.setOutlineThickness(0.f);
+            _buttonSNAKE.setOutlineThickness(0.f);
+            _buttonQUIT.setOutlineThickness(5.f);
+            _buttonQUIT.setOutlineColor(sf::Color(147,112,219));
+            break;
     }
 }
 
@@ -97,20 +139,46 @@ arcade::Input arcade::SFML::handleEvent()
     while (_window->pollEvent(_event)) {
         if (_event.type == sf::Event::Closed)
             _window->close();
-        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Escape)
-            return (arcade::Input::ESCAPE);
-        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Left)
-            return (arcade::Input::ARROW_LEFT);
-        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Right)
-            return (arcade::Input::ARROW_RIGHT);
-        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Up)
-            return (arcade::Input::ARROW_UP);
-        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Down)
-            return (arcade::Input::ARROW_DOWN);
-        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::G)
-            return (arcade::Input::SWITCH_LIB);
-        if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::H)
-            return (arcade::Input::SWITCH_GAME);
+        if (_state == STATES::MENU) {
+            if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Up) {
+                _selectedButton--;
+                if (_selectedButton < 0)
+                    _selectedButton = 2;
+            }
+            if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Down) {
+                _selectedButton++;
+                if (_selectedButton > 2)
+                    _selectedButton = 0;
+            }
+            if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Enter) {
+                if (_selectedButton == 0) {
+                    _state = STATES::GAME;
+                    return (arcade::Input::PACMAN);
+                }
+                if (_selectedButton == 1) {
+                    _state = STATES::GAME;
+                    return (arcade::Input::SNAKE);
+                }
+                if (_selectedButton == 2)
+                    _window->close();
+            }
+        }
+        if (_state == STATES::GAME) {
+            if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Escape)
+                return (arcade::Input::ESCAPE);
+            if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Left)
+                return (arcade::Input::ARROW_LEFT);
+            if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Right)
+                return (arcade::Input::ARROW_RIGHT);
+            if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Up)
+                return (arcade::Input::ARROW_UP);
+            if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Down)
+                return (arcade::Input::ARROW_DOWN);
+            if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::G)
+                return (arcade::Input::SWITCH_LIB);
+            if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::H)
+                return (arcade::Input::SWITCH_GAME);
+        }
     }
     return (arcade::Input::NONE);
 }
@@ -162,6 +230,11 @@ void arcade::SFML::refreshw(arcade::AllObjects *AllObjects)
         _window->draw(_pacmanBt);
         _window->draw(_snakeBt);
         _window->draw(_quitBt);
+
+        _window->draw(_buttonPACMAN);
+        _window->draw(_buttonSNAKE);
+        _window->draw(_buttonQUIT);
+
     }
     if (_state == STATES::GAME) {
         _window->draw(_backgroundGame);

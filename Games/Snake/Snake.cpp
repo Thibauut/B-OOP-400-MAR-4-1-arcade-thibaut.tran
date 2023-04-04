@@ -40,22 +40,43 @@ arcade::AllObjects *arcade::SnakeGame::initMap() {
     ifstream input_file("Games/Snake/assets/map.txt");
     AllObjects *allObjects = new AllObjects();
     std::string line;
-    while (getline(input_file, line))
+    while (getline(input_file, line)) {
         _map.emplace_back(line);
+        allObjects->_map.emplace_back(line);
+    }
     for (int i = 0; i < height_map; i++) {
         for (int j = 0; j < width_map; j++) {
             if (_map[i][j] == '#') {
-                Object *wall = new Object(j, i, 60, "Games/Snake/assets/image/tile024.png", arcade::Object::Type::WALL);
+                Object *wall = new Object(j, i, 60, "", arcade::Object::Type::WALL);
+                //wall
+                if (i == 0 && j != 0 && j != width_map - 1)
+                    wall->_path = "Games/Snake/assets/image/wall1.png";
+                if (j == 0 && i != 0)
+                    wall->_path = "Games/Snake/assets/image/wall2.png";
+                if (i != 0 && j == width_map - 1)
+                    wall->_path = "Games/Snake/assets/image/wall2.png";
+                if (i == height_map - 1 && j != 0 && j != width_map - 1)
+                    wall->_path = "Games/Snake/assets/image/wall1.png";
+                //corner
+                if (i == 0 && j == 0)
+                    wall->_path = "Games/Snake/assets/image/corner1.png";
+                if(i == 0 && j == width_map - 1)
+                    wall->_path = "Games/Snake/assets/image/corner2.png";
+                if(i == height_map - 1 && j == 0)
+                    wall->_path = "Games/Snake/assets/image/corner3.png";
+                if(i == height_map - 1 && j == width_map - 1)
+                    wall->_path = "Games/Snake/assets/image/corner4.png";
                 allObjects->_objects.emplace_back(wall);
             }
             if (_map[i][j] == ' ') {
-                Object *empty = new Object(j, i, 60, "", arcade::Object::Type::EMPTY);
+                Object *empty = new Object(j, i, 60, "Games/Snake/assets/image/floor.png", arcade::Object::Type::EMPTY);
                 allObjects->_objects.emplace_back(empty);
             }
         }
     }
 
-    //place player
+
+    // //place player
     allObjects->_player.emplace_back(new Object(6, 9, 60, "Games/Snake/assets/image/tile052.png", arcade::Object::Type::HEAD));
     allObjects->_player.emplace_back(new Object(5, 9, 60, "Games/Snake/assets/image/tile053.png", arcade::Object::Type::BODY));
     allObjects->_player.emplace_back(new Object(4, 9, 60, "Games/Snake/assets/image/tile053.png", arcade::Object::Type::BODY));
@@ -132,16 +153,17 @@ void arcade::SnakeGame::goLeft(arcade::AllObjects *allObjects) {
         }
     }
 
-    for (auto &x : allObjects->_food) {
-        if (x->_type == arcade::Object::Type::FOOD
-        && x->_posx == allObjects->_player.front()->_posx - 1
-        && x->_posy == allObjects->_player.front()->_posy) {
-            _score += 1;
-            std::cout << "score: " << _score << std::endl;
-            spawnBonus(allObjects);
-            allObjects->_player.emplace_back(new Object(allObjects->_player.back()->_posx, allObjects->_player.back()->_posy, allObjects->_player.back()->_size, allObjects->_player.back()->_path, allObjects->_player.back()->_type));
-            _speed -= 0.005;
-            break;
+    if (!allObjects->_food.empty()) {
+        for (auto &x : allObjects->_food) {
+            if (x->_type == arcade::Object::Type::FOOD
+            && x->_posx == allObjects->_player.front()->_posx - 1
+            && x->_posy == allObjects->_player.front()->_posy) {
+                _score += 1;
+                spawnBonus(allObjects);
+                allObjects->_player.emplace_back(new Object(allObjects->_player.back()->_posx, allObjects->_player.back()->_posy, allObjects->_player.back()->_size, allObjects->_player.back()->_path, allObjects->_player.back()->_type));
+                _speed -= 0.005;
+                break;
+            }
         }
     }
 
@@ -179,16 +201,18 @@ void arcade::SnakeGame::goRight(arcade::AllObjects *allObjects) {
         }
     }
 
-    for (auto &x : allObjects->_food) {
-        if (x->_type == arcade::Object::Type::FOOD
-        && x->_posx == allObjects->_player.front()->_posx + 1
-        && x->_posy == allObjects->_player.front()->_posy) {
-            _score += 1;
-            std::cout << "score: " << _score << std::endl;
-            spawnBonus(allObjects);
-            allObjects->_player.emplace_back(new Object(allObjects->_player.back()->_posx, allObjects->_player.back()->_posy, allObjects->_player.back()->_size, allObjects->_player.back()->_path, allObjects->_player.back()->_type));
-            _speed -= 0.005;
-            break;
+    if (!allObjects->_food.empty()) {
+        for (auto &x : allObjects->_food) {
+            if (x->_type == arcade::Object::Type::FOOD
+            && x->_posx == allObjects->_player.front()->_posx + 1
+            && x->_posy == allObjects->_player.front()->_posy) {
+                _score += 1;
+                // std::cout << "score: " << _score << std::endl;
+                spawnBonus(allObjects);
+                allObjects->_player.emplace_back(new Object(allObjects->_player.back()->_posx, allObjects->_player.back()->_posy, allObjects->_player.back()->_size, allObjects->_player.back()->_path, allObjects->_player.back()->_type));
+                _speed -= 0.005;
+                break;
+            }
         }
     }
 
@@ -226,16 +250,18 @@ void arcade::SnakeGame::goUp(arcade::AllObjects *allObjects) {
         }
     }
 
-    for (auto &x : allObjects->_food) {
-        if (x->_type == arcade::Object::Type::FOOD
-        && x->_posx == allObjects->_player.front()->_posx
-        && x->_posy == allObjects->_player.front()->_posy - 1) {
-            _score += 1;
-            std::cout << "score: " << _score << std::endl;
-            spawnBonus(allObjects);
-            allObjects->_player.emplace_back(new Object(allObjects->_player.back()->_posx, allObjects->_player.back()->_posy, allObjects->_player.back()->_size, allObjects->_player.back()->_path,allObjects->_player.back()->_type));
-            _speed -= 0.005;
-            break;
+    if (!allObjects->_food.empty()) {
+        for (auto &x : allObjects->_food) {
+            if (x->_type == arcade::Object::Type::FOOD
+            && x->_posx == allObjects->_player.front()->_posx
+            && x->_posy == allObjects->_player.front()->_posy - 1) {
+                _score += 1;
+                // std::cout << "score: " << _score << std::endl;
+                spawnBonus(allObjects);
+                allObjects->_player.emplace_back(new Object(allObjects->_player.back()->_posx, allObjects->_player.back()->_posy, allObjects->_player.back()->_size, allObjects->_player.back()->_path,allObjects->_player.back()->_type));
+                _speed -= 0.005;
+                break;
+            }
         }
     }
 
@@ -274,18 +300,20 @@ void arcade::SnakeGame::goDown(arcade::AllObjects *allObjects) {
         }
     }
 
-    for (auto &x : allObjects->_food) {
-        if (x->_type == arcade::Object::Type::FOOD
-        && x->_posx == allObjects->_player.front()->_posx
-        && x->_posy == allObjects->_player.front()->_posy + 1) {
-            _score += 1;
-            std::cout << "score: " << _score << std::endl;
-            spawnBonus(allObjects);
-            allObjects->_player.emplace_back(new Object(allObjects->_player.back()->_posx, allObjects->_player.back()->_posy, allObjects->_player.back()->_size, allObjects->_player.back()->_path, allObjects->_player.back()->_type));
-            _speed -= 0.005;
-            break;
+    if (!allObjects->_food.empty()) {
+        for (auto &x : allObjects->_food) {
+            if (x->_type == arcade::Object::Type::FOOD
+            && x->_posx == allObjects->_player.front()->_posx
+            && x->_posy == allObjects->_player.front()->_posy + 1) {
+                _score += 1;
+                spawnBonus(allObjects);
+                allObjects->_player.emplace_back(new Object(allObjects->_player.back()->_posx, allObjects->_player.back()->_posy, allObjects->_player.back()->_size, allObjects->_player.back()->_path, allObjects->_player.back()->_type));
+                _speed -= 0.005;
+                break;
+            }
         }
     }
+
 
     //move
     Object *newFront = new Object(allObjects->_player.front()->_posx,
@@ -333,7 +361,7 @@ void arcade::SnakeGame::spawnBonus(arcade::AllObjects *allObjects) {
     for (auto it = allObjects->_player.begin(); it != allObjects->_player.end(); ++it) {
         if (allObjects->_food.size() < 1 && ((*it)->_posx != x && (*it)->_posy != y)) {
             Object *newBonus = new Object(x, y, 1, _fruit[fruit], arcade::Object::Type::FOOD);
-            allObjects->_food.emplace_back(newBonus);
+            allObjects->_food.push_back(newBonus);
             bonusAdded = true;
         }
     }
@@ -351,7 +379,6 @@ void arcade::SnakeGame::spawnBonus(arcade::AllObjects *allObjects) {
 }
 
 int arcade::SnakeGame::checkSnake(AllObjects *allObjects) {
-    
     for (auto it = allObjects->_player.begin(); it != allObjects->_player.end(); ++it) {
         if ((*it)->_type == arcade::Object::Type::HEAD) {
             for (auto it2 = allObjects->_player.begin(); it2 != allObjects->_player.end(); ++it2) {

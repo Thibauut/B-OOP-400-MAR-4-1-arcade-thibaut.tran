@@ -28,7 +28,7 @@ class Ncurses: public arcade::IDisplayModule {
         void drawBackground(const std::string &background) override;
         void drawElement(arcade::Object *object) override;
         void stop() override;
-        void clear() override;
+        void clearw() override;
         const std::string &getName() const override { return _info; }
         bool isRunning() const override { return true; };
         void displayScore(int score) override;

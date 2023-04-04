@@ -30,7 +30,7 @@ namespace arcade {
             void drawBackground(const std::string &background) override;
             void drawElement(arcade::Object *object) override;
             void stop() override;
-            void clear() override {};
+            void clearw() override {};
             const std::string &getName() const override { return _info; }
             bool isRunning() const override { return true; };
             void displayScore(int score) override;
@@ -56,6 +56,11 @@ namespace arcade {
             sf::Texture _quitBtTexture;
             sf::Text _score;
             sf::Music _music;
+
+            int _selectedButton;
+            sf::RectangleShape _buttonPACMAN;
+            sf::RectangleShape _buttonSNAKE;
+            sf::RectangleShape _buttonQUIT;
 
     };
 }

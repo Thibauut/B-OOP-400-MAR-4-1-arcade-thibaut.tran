@@ -66,10 +66,10 @@ arcade::AllObjects *arcade::PacManGame::initMap() {
     }
     //place pacman
     allObjects->_player.clear();
-    allObjects->_player.emplace_back(new Object(1, 16, 60, "Games/Snake/assets/image/tile004.png", arcade::Object::Type::PACMAN));
+    allObjects->_player.emplace_back(new Object(1, 15, 60, "Games/Snake/assets/image/tile004.png", arcade::Object::Type::PACMAN));
 
     //place ghost
-    allObjects->_enemy.emplace_back(new Object(10, 9, 60, "Games/Snake/assets/image/tile0004.png", arcade::Object::Type::CLYDE));
+    allObjects->_enemy.emplace_back(new Object(18, 9, 60, "Games/Snake/assets/image/tile0004.png", arcade::Object::Type::CLYDE));
     allObjects->_enemy.emplace_back(new Object(11, 9, 60, "Games/Snake/assets/image/tile0002.png", arcade::Object::Type::BLINKY));
     allObjects->_enemy.emplace_back(new Object(12, 9, 60, "Games/Snake/assets/image/tile0001.png", arcade::Object::Type::PINKY));
     allObjects->_enemy.emplace_back(new Object(13, 9, 60, "Games/Snake/assets/image/tile0003.png", arcade::Object::Type::INKY));
