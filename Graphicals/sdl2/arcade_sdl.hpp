@@ -39,6 +39,7 @@ namespace arcade {
 
             int _state;
             std::string _info;
+            Uint32 _clock;
             SDL_Window *_window;
             SDL_Renderer *_renderer;
             TTF_Font *_font;
@@ -48,18 +49,7 @@ namespace arcade {
             SDL_Rect _backgroundRect;
             SDL_Texture *_score;
             SDL_Rect _scoreRect;
-            // sf::Sprite _backgroundGame;
-            // sf::Texture _backgroundGameTexture;
-            // sf::Text _title;
-            // sf::Clock _clock;
-            // sf::IntRect _rectBackground;
-            // sf::Sprite _pacmanBt;
-            // sf::Texture _pacmanBtTexture;
-            // sf::Sprite _snakeBt;
-            // sf::Texture _snakeBtTexture;
-            // sf::Sprite _quitBt;
-            // sf::Texture _quitBtTexture;
-            // sf::Music _music;
-
+            SDL_Rect **_rectBackground;
+            int xrb, yrb;
     };
 }

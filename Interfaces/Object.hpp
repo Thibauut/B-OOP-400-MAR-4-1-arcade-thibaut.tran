@@ -13,10 +13,26 @@
 #include <fstream>
 #include <sstream>
 
-namespace arcade {
-    class Object {
+namespace arcade
+{
+    // class Animation
+    // {
+    //     public:
+    //         Animation(std::string path, int nbFrame, int frameRate) : _path(path), _nbFrame(nbFrame), _frameRate(frameRate){};
+    //         ~Animation(){};
+
+    //         std::string _path;
+
+    //         template<typename T> clock;
+    //         int _nbFrame;
+    //         int _frameRate;
+    // };
+
+    class Object
+    {
         public:
-            enum Type {
+            enum Type
+            {
                 WALL,
                 HEAD,
                 BODY,
@@ -29,9 +45,8 @@ namespace arcade {
                 BOOST,
                 FOOD
             };
-            Object(float posx, float posy, float size, std::string path, Type type) :
-            _posx(posx), _posy(posy), _size(size), _path(path), _type(type) {};
-            ~Object() {};
+            Object(float posx, float posy, float size, std::string path, Type type) : _posx(posx), _posy(posy), _size(size), _path(path), _type(type){};
+            ~Object(){};
 
             float _posx = 0;
             float _posy = 0;

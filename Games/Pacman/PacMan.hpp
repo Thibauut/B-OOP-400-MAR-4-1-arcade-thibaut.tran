@@ -61,6 +61,6 @@ namespace arcade {
 
             int _score;
             std::vector<arcade::Sound*> _sound;
-            float _speed = 0.08;
+            float _speed = 0.03;
     };
 }

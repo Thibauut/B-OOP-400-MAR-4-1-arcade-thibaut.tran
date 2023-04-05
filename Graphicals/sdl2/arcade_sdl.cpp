@@ -40,8 +40,9 @@ extern "C" void __attribute__((destructor)) clean_sdl() {
 
 arcade::SDL2::SDL2()
 {
+    _clock = SDL_GetTicks();
     _info = "SDL2";
-    _state = STATES::GAME;
+    _state = STATES::MENU;
     SDL_Event event;
     SDL_zero(event);
     event.type = SDL_USEREVENT;
@@ -56,16 +57,58 @@ arcade::SDL2::~SDL2() = default;
 
 void arcade::SDL2::menu()
 {
-    // sf::Time elapsed = _clock.getElapsedTime();
-    // if (elapsed.asMilliseconds() > 100)
+    Uint32 currentTime = SDL_GetTicks();
+    Uint32 elapsedTime = currentTime - _clock;
+    if (elapsedTime > 100) {
+        xrb++;
+        if (xrb == 5) {
+            xrb = 0;
+            yrb++;
+        }
+        if (yrb == 11)
+            yrb = 0;
+        _clock = currentTime;
+    }
+
+    // sf::Vector2i mousePosition = sf::Mouse::getPosition();
+
+
+    // sf::RectangleShape buttonPACMAN(sf::Vector2f(_pacmanBt.getGlobalBounds().width, _pacmanBt.getGlobalBounds().height));
+    // buttonPACMAN.setPosition(_pacmanBt.getPosition());
+    // _buttonPACMAN = buttonPACMAN;
+    // _buttonPACMAN.setTexture(&_pacmanBtTexture);
+
+    // sf::RectangleShape buttonSNAKE(sf::Vector2f(_snakeBt.getGlobalBounds().width, _snakeBt.getGlobalBounds().height));
+    // buttonSNAKE.setPosition(_snakeBt.getPosition());
+    // _buttonSNAKE = buttonSNAKE;
+    // _buttonSNAKE.setTexture(&_snakeBtTexture);
+
+    // sf::RectangleShape buttonQUIT(sf::Vector2f(_quitBt.getGlobalBounds().width, _quitBt.getGlobalBounds().height));
+    // buttonQUIT.setPosition(_quitBt.getPosition());
+    // _buttonQUIT = buttonQUIT;
+    // _buttonQUIT.setTexture(&_quitBtTexture);
+
+    //selected button
+    // switch (_selectedButton)
     // {
-    //     _rectBackground.left += 1920;
-    //     if  (_rectBackground.left >= 11520)
-    //         _rectBackground.left = 0,  _rectBackground.top += 1080;
-    //     if  (_rectBackground.top >= 12960)
-    //         _rectBackground.top = 0;
-    //     _background.setTextureRect(_rectBackground);
-    //     _clock.restart();
+    //     case 0:
+    //         _buttonPACMAN.setOutlineThickness(5.f);
+    //         _buttonPACMAN.setOutlineColor(sf::Color(147,112,219));
+    //         _buttonSNAKE.setOutlineThickness(0.f);
+    //         _buttonQUIT.setOutlineThickness(0.f);
+    //         break;
+    //     case 1:
+    //         _buttonPACMAN.setOutlineThickness(0.f);
+    //         _buttonSNAKE.setOutlineThickness(5.f);
+    //         _buttonSNAKE.setOutlineColor(sf::Color(147,112,219));
+    //         _buttonQUIT.setOutlineThickness(0.f);
+    //         break;
+    //     case 2:
+    //         _buttonPACMAN.setOutlineThickness(0.f);
+    //         _buttonSNAKE.setOutlineThickness(0.f);
+    //         _buttonQUIT.setOutlineThickness(5.f);
+    //         _buttonQUIT.setOutlineColor(sf::Color(147,112,219));
+    //         break;
     // }
 }
 
@@ -100,12 +143,19 @@ void arcade::SDL2::init()
     SDL_RenderCopy(_renderer, texture, NULL, &rect);
 
     // background
-    // _backgroundTexture.loadFromFile("assets/image/background.png");
-    // _background.setTexture(_backgroundTexture);
-    // _background.setPosition(0, 0);
-    // _background.setScale(1, 1);
+    _background = IMG_Load("assets/image/background.png");
+    _backgroundTexture = SDL_CreateTextureFromSurface(_renderer, _background);
 
-    // //anim background
+    // anim background
+    xrb = 0, yrb = 0;
+    for (int row = 0; row < 12; row++) {
+        for (int col = 0; col < 6; col++) {
+            _rectBackground[row][col].x = col * 1920;
+            _rectBackground[row][col].y = row * 1080;
+            _rectBackground[row][col].w = 1920;
+            _rectBackground[row][col].h = 1080;
+        }
+    }
     // sf::IntRect rectBackground(0, 0, 1920, 1080);
     // _rectBackground = rectBackground;
     // _background.setTextureRect(_rectBackground);
@@ -228,11 +278,12 @@ void arcade::SDL2::refreshw(arcade::AllObjects *AllObjects)
 {
     SDL_RenderClear(_renderer);
     if (_state == STATES::MENU) {
-        SDL_RenderCopy(_renderer, _backgroundTexture, NULL, &_backgroundRect);
+        SDL_RenderCopy(_renderer, _backgroundTexture, &_rectBackground[yrb][xrb], &_backgroundRect);
         // SDL_RenderCopy(_renderer, _title, NULL, &_backgroundRect);
         // _window->draw(_pacmanBt);
         // _window->draw(_snakeBt);
         // _window->draw(_quitBt);
+        SDL_RenderPresent(_renderer);
     }
     if (_state == STATES::GAME) {
         SDL_RenderCopy(_renderer, _backgroundTexture, NULL, &_backgroundRect);

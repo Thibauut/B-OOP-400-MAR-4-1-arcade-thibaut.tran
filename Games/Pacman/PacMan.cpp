@@ -7,7 +7,6 @@
 
 #include "PacMan.hpp"
 
-#include <ncurses.h>
 
 extern "C" void __attribute__((constructor)) init_arcade_pacman() {
     printf("[arcade_pacman] Loading library...\n");
