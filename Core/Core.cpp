@@ -31,12 +31,20 @@ void Core::switchLibraryGame(DLLoader <arcade::IGame> *dl, const char *lib)
 
 void Core::checkInputs(arcade::Input input, DLLoader <arcade::IDisplayModule> *dl, DLLoader <arcade::IGame> *dlGame)
 {
+    if (input == arcade::Input::PAUSE_1 && _state == arcade::STATES::GAME) {
+        _state = arcade::STATES::PAUSE;
+        return;
+    }
+    if (input == arcade::Input::RESUME && _state == arcade::STATES::PAUSE) {
+        _state = arcade::STATES::GAME;
+        return;
+    }
     if (input == arcade::Input::SWITCH_LIB) {
         if (_currentDisplay->getName() == "Ncurses")
             switchLibraryGraphical(dl, "lib/arcade_sdl.so");
         else
             switchLibraryGraphical(dl, "lib/arcade_ncurses.so");
-    } else if (input == arcade::Input::SWITCH_GAME) {
+    } else if (input == arcade::Input::SWITCH_GAME && _state == arcade::STATES::GAME) {
         if (_currentGame->getInfo() == "PacMan")
             switchLibraryGame(dlGame, "lib/arcade_snake.so");
         else
@@ -96,6 +104,12 @@ void Core::run(DLLoader <arcade::IDisplayModule> *dl)
             _currentDisplay->drawBackground(_currentGame->getBackground());
             _currentDisplay->displayScore(_currentGame->getScore());
             _currentDisplay->refreshw(_allObjects);
+        }
+        while (_state == arcade::STATES::PAUSE) {
+            // _currentDisplay->pause();
+            arcade::Input input = _currentDisplay->handleEvent();
+            checkInputs(input, dl, &dlGame);
+            // _currentDisplay->refreshw(_allObjects);
         }
         while (_state == arcade::STATES::MENU) {
             _currentDisplay->menu();

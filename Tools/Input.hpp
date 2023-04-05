@@ -12,6 +12,7 @@ namespace arcade {
         MENU = 0,
         GAME,
         SETTINGS,
+        PAUSE,
         EXIT
     };
 
@@ -19,6 +20,7 @@ namespace arcade {
         ENTER = 10,
         ESCAPE = 27,
         SPACE = 32,
+        RESUME = 80,
         ARROW_UP = 65,
         ARROW_DOWN = 66,
         ARROW_RIGHT = 67,
@@ -28,6 +30,7 @@ namespace arcade {
         MENU_1 = 109,
         PACMAN = 1000,
         SNAKE = 1001,
+        PAUSE_1 = 80,
         NONE = 0
     };
 }

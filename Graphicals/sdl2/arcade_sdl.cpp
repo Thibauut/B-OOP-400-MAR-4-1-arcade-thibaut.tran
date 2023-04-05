@@ -154,6 +154,8 @@ arcade::Input arcade::SDL2::handleEvent()
                     return (arcade::Input::SWITCH_LIB);
                 if (_event->key.keysym.sym == SDLK_h)
                     return (arcade::Input::SWITCH_GAME);
+                if (_event->key.keysym.sym == SDLK_p)
+                    return (arcade::Input::PAUSE_1);
                 break;
             default:
                 return (arcade::Input::NONE);

@@ -18,6 +18,7 @@ namespace arcade {
                 MENU,
                 GAME,
                 SETTINGS,
+                PAUSE,
                 EXIT
             };
             SFML();

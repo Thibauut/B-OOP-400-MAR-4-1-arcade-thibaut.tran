@@ -136,6 +136,8 @@ arcade::Input Ncurses::handleEvent()
         return arcade::Input::SWITCH_LIB;
     if (ch == 'h')
         return arcade::Input::SWITCH_GAME;
+    if (ch == 'p')
+        return arcade::Input::PAUSE_1;
     return arcade::Input::NONE;
 }
 

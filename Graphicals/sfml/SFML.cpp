@@ -139,6 +139,12 @@ arcade::Input arcade::SFML::handleEvent()
     while (_window->pollEvent(_event)) {
         if (_event.type == sf::Event::Closed)
             _window->close();
+        if (_state == STATES::PAUSE) {
+            if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::P) {
+                _state = STATES::GAME;
+                return (arcade::Input::RESUME);
+            }
+        }
         if (_state == STATES::MENU) {
             if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Up) {
                 _selectedButton--;
@@ -164,6 +170,10 @@ arcade::Input arcade::SFML::handleEvent()
             }
         }
         if (_state == STATES::GAME) {
+            if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::P) {
+                _state = STATES::PAUSE;
+                return (arcade::Input::PAUSE_1);
+            }
             if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Escape)
                 return (arcade::Input::ESCAPE);
             if (_event.type == sf::Event::KeyPressed && _event.key.code == sf::Keyboard::Left)
