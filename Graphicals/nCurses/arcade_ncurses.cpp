@@ -106,6 +106,66 @@ void Ncurses::menu()
     }
 }
 
+void Ncurses::pauseMenu()
+{
+    initscr();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    const char* options[] = {"  RESUME  ", "  RETURN TO MENU  ", "  SWITCH LIBRARY  ", "  LEAVE  "};
+    int selected_option = 0;
+    start_color();
+    init_pair(1, COLOR_WHITE, COLOR_WHITE);
+    init_pair(2, COLOR_WHITE, COLOR_BLACK);
+    while (true)
+    {
+        print_title();
+        int menu_width = MENU_WIDTH;
+        for (int i = 0; i < 4; i++)
+        {
+            int option_length = strlen(options[i]);
+            if (option_length > menu_width) {
+                menu_width = option_length;
+            }
+        }
+        int start_col = (COLS - menu_width) / 2;
+        for (int i = 0; i < 3; i++)
+        {
+            int option_length = strlen(options[i]);
+            int option_col = start_col + (menu_width - option_length) / 2;
+            attron(i == selected_option ? COLOR_PAIR(1) : COLOR_PAIR(2));
+            mvprintw((LINES - MENU_HEIGHT) / 2 + i, option_col, "%s", options[i]);
+            attroff(i == selected_option ? COLOR_PAIR(1) : COLOR_PAIR(2));
+        }
+        refresh();
+        int ch = getch();
+        switch (ch)
+        {
+            case KEY_UP:
+                selected_option = (selected_option - 1 + 4) % 4;
+                break;
+            case KEY_DOWN:
+                selected_option = (selected_option + 1) % 4;
+                break;
+            case '\n':
+                if (selected_option == 0) {
+                    // resume the game
+                }
+                else if (selected_option == 1) {
+                    // return to menu
+                }
+                else if (selected_option == 2) {
+                    // switch library
+                }
+                else {
+                    endwin();
+                    exit(0);
+                }
+                break;
+        }
+    }
+}
+
 
 void Ncurses::init()
 {
@@ -151,66 +211,10 @@ void Ncurses::clearw()
     clear();
 }
 
-void gameMenu() {
-    initscr();
-    cbreak();
-    noecho();
-    keypad(stdscr, TRUE);
-    const char* options[] = {"  SNAKE  ", " PAC-MAN ", "  LEAVE  "};
-    int selected_option = 0;
-    start_color();
-    init_pair(1, COLOR_WHITE, COLOR_WHITE);
-    init_pair(2, COLOR_WHITE, COLOR_BLACK);
-    while (true)
-    {
-        print_title();
-        int menu_width = MENU_WIDTH;
-        for (int i = 0; i < 3; i++)
-        {
-            int option_length = strlen(options[i]);
-            if (option_length > menu_width) {
-                menu_width = option_length;
-            }
-        }
-        int start_col = (COLS - menu_width) / 2;
-        for (int i = 0; i < 3; i++)
-        {
-            int option_length = strlen(options[i]);
-            int option_col = start_col + (menu_width - option_length) / 2;
-            attron(i == selected_option ? COLOR_PAIR(1) : COLOR_PAIR(2));
-            mvprintw((LINES - MENU_HEIGHT) / 2 + i, option_col, "%s", options[i]);
-            attroff(i == selected_option ? COLOR_PAIR(1) : COLOR_PAIR(2));
-        }
-        refresh();
-        int ch = getch();
-        switch (ch)
-        {
-            case KEY_UP:
-                selected_option = (selected_option - 1 + 3) % 3;
-                break;
-            case KEY_DOWN:
-                selected_option = (selected_option + 1) % 3;
-                break;
-            case '\n':
-                if (selected_option == 0) {
-                    // start the SNAKE game
-                }
-                else if (selected_option == 1) {
-                    // start the PACMAN game
-                }
-                else {
-                    endwin();
-                    exit(0);
-                }
-                break;
-        }
-    }
-}
-
 void Ncurses::refreshw(arcade::AllObjects *AllObjects)
 {
     if (_state == STATES::MENU) {
-        gameMenu();
+        menu();
     }
     if (_state == STATES::GAME) {
         for (int i = 0; i < AllObjects->_map.size(); i++) {

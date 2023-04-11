@@ -16,6 +16,7 @@ class Ncurses: public arcade::IDisplayModule {
             MENU,
             GAME,
             SETTINGS,
+            PAUSE,
             EXIT
         };
         Ncurses();
@@ -25,6 +26,7 @@ class Ncurses: public arcade::IDisplayModule {
         arcade::Input handleEvent() override;
         void refreshw(arcade::AllObjects *AllObjects) override;
         void menu() override;
+        void pauseMenu() override;
         void drawBackground(const std::string &background) override;
         void drawElement(arcade::Object *object) override;
         void stop() override;

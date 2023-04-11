@@ -41,7 +41,7 @@ void Core::checkInputs(arcade::Input input, DLLoader <arcade::IDisplayModule> *d
     }
     if (input == arcade::Input::SWITCH_LIB) {
         if (_currentDisplay->getName() == "Ncurses")
-            switchLibraryGraphical(dl, "lib/arcade_sdl.so");
+            switchLibraryGraphical(dl, "lib/arcade_sdl2.so");
         else
             switchLibraryGraphical(dl, "lib/arcade_ncurses.so");
     } else if (input == arcade::Input::SWITCH_GAME && _state == arcade::STATES::GAME) {
@@ -67,6 +67,12 @@ void Core::checkInputsMenu(arcade::Input input, DLLoader <arcade::IDisplayModule
         _state = arcade::STATES::MENU;
     } else if (input == arcade::Input::PACMAN) {
         dlGame->switchLibrary("lib/arcade_pacman.so");
+        setGame(dlGame->getInstance("entryPoint"));
+        _allObjects = _currentGame->initMap();
+        _currentGame->initGame();
+        _state = arcade::STATES::GAME;
+    } else if (input == arcade::Input::SFT) {
+        dlGame->switchLibrary("lib/arcade_sft.so");
         setGame(dlGame->getInstance("entryPoint"));
         _allObjects = _currentGame->initMap();
         _currentGame->initGame();
@@ -106,14 +112,15 @@ void Core::run(DLLoader <arcade::IDisplayModule> *dl)
             _currentDisplay->refreshw(_allObjects);
         }
         while (_state == arcade::STATES::PAUSE) {
-            // _currentDisplay->pause();
+            _currentDisplay->pauseMenu();
             arcade::Input input = _currentDisplay->handleEvent();
             checkInputs(input, dl, &dlGame);
-            // _currentDisplay->refreshw(_allObjects);
+            _currentDisplay->refreshw(_allObjects);
         }
         while (_state == arcade::STATES::MENU) {
             _currentDisplay->menu();
             arcade::Input input = _currentDisplay->handleEvent();
+            // _currentDisplay->drawBackground("assets/image/background.png");
             checkInputsMenu(input, dl, &dlGame);
             _currentDisplay->refreshw(_allObjects);
         }

@@ -7,7 +7,6 @@
 
 #include "PacMan.hpp"
 
-
 extern "C" void __attribute__((constructor)) init_arcade_pacman() {
     printf("[arcade_pacman] Loading library...\n");
     printf("[arcade_pacman] Library loaded !\n");
@@ -69,7 +68,7 @@ arcade::AllObjects *arcade::PacManGame::initMap() {
 
     //place ghost
     allObjects->_enemy.emplace_back(new Object(18, 9, 60, "Games/Snake/assets/image/tile0004.png", arcade::Object::Type::CLYDE));
-    allObjects->_enemy.emplace_back(new Object(11, 9, 60, "Games/Snake/assets/image/tile0002.png", arcade::Object::Type::BLINKY));
+    allObjects->_enemy.emplace_back(new Object(15, 9, 60, "Games/Snake/assets/image/tile0002.png", arcade::Object::Type::BLINKY));
     allObjects->_enemy.emplace_back(new Object(12, 9, 60, "Games/Snake/assets/image/tile0001.png", arcade::Object::Type::PINKY));
     allObjects->_enemy.emplace_back(new Object(13, 9, 60, "Games/Snake/assets/image/tile0003.png", arcade::Object::Type::INKY));
 
@@ -86,19 +85,69 @@ std::string arcade::PacManGame::getInfo() {
 
 void arcade::PacManGame::initGame() {}
 
-int arcade::PacManGame::handleEvent(arcade::Input input) {
+int arcade::PacManGame::handleEvent(arcade::Input input)
+{
     if (input == arcade::Input::ARROW_LEFT)
-        _direction = arcade::Input::ARROW_LEFT;
+        _nextDirection = arcade::Input::ARROW_LEFT;
     if (input == arcade::Input::ARROW_RIGHT)
-        _direction = arcade::Input::ARROW_RIGHT;
+        _nextDirection = arcade::Input::ARROW_RIGHT;
     if (input == arcade::Input::ARROW_UP)
-        _direction = arcade::Input::ARROW_UP;
+        _nextDirection = arcade::Input::ARROW_UP;
     if (input == arcade::Input::ARROW_DOWN)
-        _direction = arcade::Input::ARROW_DOWN;
+        _nextDirection = arcade::Input::ARROW_DOWN;
     return 0;
 }
 
+bool arcade::PacManGame::isValidNextDirection(AllObjects *allObjects)
+{
+    if (_nextDirection == arcade::Input::ARROW_LEFT) {
+        for (auto &i: allObjects->_objects) {
+            if (i->_posx == allObjects->_player.front()->_posx - 1 && i->_posy == allObjects->_player.front()->_posy) {
+                if (i->_type == arcade::Object::Type::WALL) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    if (_nextDirection == arcade::Input::ARROW_RIGHT) {
+        for (auto &i: allObjects->_objects) {
+            if (i->_posx == allObjects->_player.front()->_posx + 1 && i->_posy == allObjects->_player.front()->_posy) {
+                if (i->_type == arcade::Object::Type::WALL) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    if (_nextDirection == arcade::Input::ARROW_UP) {
+        for (auto &i: allObjects->_objects) {
+            if (i->_posx == allObjects->_player.front()->_posx && i->_posy == allObjects->_player.front()->_posy - 1) {
+                if (i->_type == arcade::Object::Type::WALL) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    if (_nextDirection == arcade::Input::ARROW_DOWN) {
+        for (auto &i: allObjects->_objects) {
+            if (i->_posx == allObjects->_player.front()->_posx && i->_posy == allObjects->_player.front()->_posy + 1) {
+                if (i->_type == arcade::Object::Type::WALL) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
 void arcade::PacManGame::keepMoving(AllObjects *allObjects) {
+    if (isValidNextDirection(allObjects)) {
+        _direction = _nextDirection;
+        _nextDirection = 0;
+    }
     if (_direction == arcade::Input::ARROW_LEFT) {
         goLeft(allObjects);
         return;
@@ -117,11 +166,13 @@ void arcade::PacManGame::keepMoving(AllObjects *allObjects) {
     }
 }
 
-void arcade::PacManGame::goLeft(AllObjects *allObjects) {
+void arcade::PacManGame::goPacMan(AllObjects *allObjects) {
     for (auto &i: allObjects->_objects) {
         if (i->_posx == allObjects->_player.front()->_posx - 1 && i->_posy == allObjects->_player.front()->_posy) {
-            if (i->_type == arcade::Object::Type::WALL)
+            if (i->_type == arcade::Object::Type::WALL) {
+                _nextDirection = 68;
                 return;
+            }
         }
     }
 
@@ -135,7 +186,34 @@ void arcade::PacManGame::goLeft(AllObjects *allObjects) {
 
     Object *newFront = new Object(allObjects->_player.front()->_posx - 1,
     allObjects->_player.front()->_posy,
-    allObjects->_player.front()->_size,
+    allObjects->_player.front()->_sizex,
+    "Games/Snake/assets/image/tile002.png",
+    allObjects->_player.front()->_type);
+    allObjects->_player.push_front(newFront);
+    allObjects->_player.pop_back();
+}
+
+void arcade::PacManGame::goLeft(AllObjects *allObjects) {
+    for (auto &i: allObjects->_objects) {
+        if (i->_posx == allObjects->_player.front()->_posx - 1 && i->_posy == allObjects->_player.front()->_posy) {
+            if (i->_type == arcade::Object::Type::WALL) {
+                _nextDirection = 68;
+                return;
+            }
+        }
+    }
+
+    for (auto it = allObjects->_food.begin(); it != allObjects->_food.end(); ++it) {
+        if ((*it)->_posx == allObjects->_player.front()->_posx - 1 && (*it)->_posy == allObjects->_player.front()->_posy) {
+            allObjects->_food.erase(it);
+            _score += 10;
+            break;
+        }
+    }
+
+    Object *newFront = new Object(allObjects->_player.front()->_posx - 1,
+    allObjects->_player.front()->_posy,
+    allObjects->_player.front()->_sizex,
     "Games/Snake/assets/image/tile002.png",
     allObjects->_player.front()->_type);
     allObjects->_player.push_front(newFront);
@@ -146,8 +224,10 @@ void arcade::PacManGame::goRight(AllObjects *allObjects) {
 
     for (auto &i: allObjects->_objects) {
         if (i->_posx == allObjects->_player.front()->_posx + 1 && i->_posy == allObjects->_player.front()->_posy) {
-            if (i->_type == arcade::Object::Type::WALL)
+            if (i->_type == arcade::Object::Type::WALL) {
+                _nextDirection = 67;
                 return;
+            }
         }
     }
 
@@ -161,7 +241,7 @@ void arcade::PacManGame::goRight(AllObjects *allObjects) {
 
     Object *newFront = new Object(allObjects->_player.front()->_posx + 1,
     allObjects->_player.front()->_posy,
-    allObjects->_player.front()->_size,
+    allObjects->_player.front()->_sizex,
     "Games/Snake/assets/image/tile004.png",
     allObjects->_player.front()->_type);
     allObjects->_player.push_front(newFront);
@@ -171,8 +251,10 @@ void arcade::PacManGame::goRight(AllObjects *allObjects) {
 void arcade::PacManGame::goUp(AllObjects *allObjects) {
     for (auto &i: allObjects->_objects) {
         if (i->_posx == allObjects->_player.front()->_posx && i->_posy == allObjects->_player.front()->_posy - 1) {
-            if (i->_type == arcade::Object::Type::WALL)
+            if (i->_type == arcade::Object::Type::WALL) {
+                _nextDirection = 65;
                 return;
+            }
         }
     }
 
@@ -186,7 +268,7 @@ void arcade::PacManGame::goUp(AllObjects *allObjects) {
 
     Object *newFront = new Object(allObjects->_player.front()->_posx,
     allObjects->_player.front()->_posy - 1,
-    allObjects->_player.front()->_size,
+    allObjects->_player.front()->_sizex,
     "Games/Snake/assets/image/tile001.png",
     allObjects->_player.front()->_type);
     allObjects->_player.push_front(newFront);
@@ -196,8 +278,10 @@ void arcade::PacManGame::goUp(AllObjects *allObjects) {
 void arcade::PacManGame::goDown(AllObjects *allObjects) {
     for (auto &i: allObjects->_objects) {
         if (i->_posx == allObjects->_player.front()->_posx && i->_posy == allObjects->_player.front()->_posy + 1) {
-            if (i->_type == arcade::Object::Type::WALL)
+            if (i->_type == arcade::Object::Type::WALL) {
+                _nextDirection = 66;
                 return;
+            }
         }
     }
 
@@ -211,7 +295,7 @@ void arcade::PacManGame::goDown(AllObjects *allObjects) {
 
     Object *newFront = new Object(allObjects->_player.front()->_posx,
     allObjects->_player.front()->_posy + 1,
-    allObjects->_player.front()->_size,
+    allObjects->_player.front()->_sizex,
     "Games/Snake/assets/image/tile003.png",
     allObjects->_player.front()->_type);
     allObjects->_player.push_front(newFront);
@@ -231,7 +315,7 @@ void arcade::PacManGame::blinky(arcade::AllObjects *allObjects)
 {
     for (auto &it: allObjects->_enemy) {
         if (it->_type == arcade::Object::Type::BLINKY) {
-            moveGhost(it, allObjects);
+            moveBlinky(it, allObjects);
         }
     }
 }
@@ -289,6 +373,73 @@ void arcade::PacManGame::moveGhost(arcade::Object *_ghost, arcade::AllObjects *a
         return;
     dir = validDirs[rand() % validDirs.size()];
 
+    switch (dir) {
+        case arcade::Input::ARROW_LEFT:
+            ghostMove(_ghost, allObjects, -1, 0);
+            break;
+        case arcade::Input::ARROW_RIGHT:
+            ghostMove(_ghost, allObjects, 1, 0);
+            break;
+        case arcade::Input::ARROW_UP:
+            ghostMove(_ghost, allObjects, 0, -1);
+            break;
+        case arcade::Input::ARROW_DOWN:
+            ghostMove(_ghost, allObjects, 0, 1);
+            break;
+    }
+    _ghost->_lastDirection = dir;
+    if (_ghost->_posx == allObjects->_player.front()->_posx && _ghost->_posy == allObjects->_player.front()->_posy) {
+        _gameOver = true;
+        return;
+    }
+}
+
+bool arcade::PacManGame::isBlinkyNearX(arcade::Object *_ghost, arcade::AllObjects *allObjects, int x)
+{
+    int px = allObjects->_player.front()->_posx;
+    int gx = _ghost->_posx;
+    if (gx > px) {
+        if (x - px < gx - px)
+            return true;
+    } else {
+        if (px - x < px - gx)
+            return true;
+    }
+    return false;
+}
+
+bool arcade::PacManGame::isBlinkyNearY(arcade::Object *_ghost, arcade::AllObjects *allObjects, int y)
+{
+    int py = allObjects->_player.front()->_posy;
+    int gy = _ghost->_posy;
+    if (gy > py) {
+        if (y - py < gy - py)
+            return true;
+    } else {
+        if (py - y < py - gy)
+            return true;
+    }
+    return false;
+}
+
+void arcade::PacManGame::moveBlinky(arcade::Object *_ghost, arcade::AllObjects *allObjects)
+{
+    srand(time(NULL));
+    std::vector<int> validDirs;
+    int dir = rand() % 4;
+    if (isValidDirection(_ghost->_posx - 1, _ghost->_posy, allObjects) && isBlinkyNearX(_ghost, allObjects, _ghost->_posx - 1))
+        validDirs.push_back(arcade::Input::ARROW_LEFT);
+    if (isValidDirection(_ghost->_posx + 1, _ghost->_posy, allObjects) && isBlinkyNearX(_ghost, allObjects, _ghost->_posx + 1))
+        validDirs.push_back(arcade::Input::ARROW_RIGHT);
+    if (isValidDirection(_ghost->_posx, _ghost->_posy - 1, allObjects) && isBlinkyNearY(_ghost, allObjects, _ghost->_posy - 1))
+        validDirs.push_back(arcade::Input::ARROW_UP);
+    if (isValidDirection(_ghost->_posx, _ghost->_posy + 1, allObjects) && isBlinkyNearY(_ghost, allObjects, _ghost->_posy + 1))
+        validDirs.push_back(arcade::Input::ARROW_DOWN);
+    if (validDirs.empty()) {
+        moveGhost(_ghost, allObjects);
+        return;
+    }
+    dir = validDirs[rand() % 2];
     switch (dir) {
         case arcade::Input::ARROW_LEFT:
             ghostMove(_ghost, allObjects, -1, 0);
