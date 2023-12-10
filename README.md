@@ -2,15 +2,15 @@
 # Arcade
 Arcade is a game platform from the "Object-Oriented Programming" module and is a project for our 2nd year at EPITECH. It is a program that allows the user to choose a game and keeps a record of the players' states. There are two games that can be used with three interchangeable graphics libraries at any time during the game.
 
-## Requirements
+# Requirements
 
 - C++ compiler
 - Makefile
 - Core, games, display separated
-- 3 graphic libs differents
+- 3 differents graphic library
 
 
-## Librairies
+# Librairies
 ### Graphic
 We include `3` graphic libs:
 - SFML
@@ -22,14 +22,14 @@ We have created `2` game libs:
 - Pacman
 - Snake
 
-## Build
+# Build
 
 ```
 make re
 ```
 
-## Usage
-```bash
+# Usage
+```
 USAGE:
   ./arcade path_to_graphic_lib
 
@@ -45,11 +45,7 @@ COMMANDS:
   R           reset the game
   ESC         quit arcade
 ```
-
-## Documentation
-In progress...
-
-## Contributors
+# Contributors
 
 - [Maori Dino](https://github.com/MaoKoro)
 - [Thibaut Tran](https://github.com/Thibauut)
